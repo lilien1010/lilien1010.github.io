@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   
-  <title><![CDATA[Hexo]]></title>
-  
+  <title><![CDATA[李大薯的窝窝头]]></title>
+  <subtitle><![CDATA[大薯的技术博客，吹水扯撕B]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
   <updated>2015-06-21T06:32:27.000Z</updated>
