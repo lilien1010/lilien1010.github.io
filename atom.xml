@@ -5,7 +5,7 @@
   <subtitle><![CDATA[大薯的技术博客，吹水扯撕B]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.hellotalk.org//"/>
-  <updated>2015-06-21T06:32:27.000Z</updated>
+  <updated>2015-06-22T05:39:04.000Z</updated>
   <id>http://www.hellotalk.org//</id>
   
   <author>
@@ -14,6 +14,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[how-to-build-this]]></title>
+    <link href="http://www.hellotalk.org/2015/06/22/how-to-build-this/"/>
+    <id>http://www.hellotalk.org/2015/06/22/how-to-build-this/</id>
+    <published>2015-06-22T05:29:16.000Z</published>
+    <updated>2015-06-22T05:39:04.000Z</updated>
+    <content type="html"><![CDATA[<p>categories:</p>
+<ul>
+<li>Diary<br>tags:</li>
+<li>PS3</li>
+<li>Games<figure class="highlight ruby"><figcaption><span>_.compact</span><a href="http://underscorejs.org/#compact" target="_blank" rel="external">Underscore.js</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">_</span>.compact([<span class="number">0</span>, <span class="number">1</span>, <span class="keyword">false</span>, <span class="number">2</span>, <span class="string">''</span>, <span class="number">3</span>]);</span><br><span class="line"><span class="status">=&gt;</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>categories:</p>
+<ul>
+<li>Diary<br>tags:</li>
+<li>PS3</li>
+<li>Games<figure class="highlight ruby"><figcaption><span>_.compact</span><a hr]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Hello World]]></title>
