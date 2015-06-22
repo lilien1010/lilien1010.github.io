@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.hellotalk.org/2015/06/22/how-to-build-this/</loc>
+    <lastmod>2015-06-22T06:54:37.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.hellotalk.org/2015/06/22/Mysql%E6%95%B0%E6%8D%AE%E5%BA%93MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/</loc>
     <lastmod>2015-06-22T05:44:18.000Z</lastmod>
   </url>
@@ -9,16 +14,6 @@
   <url>
     <loc>http://www.hellotalk.org/2015/06/22/Mysql/</loc>
     <lastmod>2015-06-22T05:41:26.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.hellotalk.org/2015/06/22/how-to-build-this/</loc>
-    <lastmod>2015-06-22T05:39:04.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://www.hellotalk.org/2015/06/21/hello-world/</loc>
-    <lastmod>2015-06-21T06:32:27.000Z</lastmod>
   </url>
   
 </urlset>
