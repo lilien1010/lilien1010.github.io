@@ -2,6 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.hellotalk.org/tags/index.html</loc>
+    <lastmod>2016-01-16T09:42:14.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.hellotalk.org/categories/index.html</loc>
+    <lastmod>2016-01-16T09:41:29.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://www.hellotalk.org/about/index.html</loc>
+    <lastmod>2016-01-16T09:37:33.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://www.hellotalk.org/2016/01/16/lua-charCodeAt/</loc>
     <lastmod>2016-01-16T07:18:26.000Z</lastmod>
   </url>

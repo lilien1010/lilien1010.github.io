@@ -21,11 +21,11 @@
     <id>http://www.hellotalk.org/2016/01/16/lua-charCodeAt/</id>
     <published>2016-01-16T07:15:02.000Z</published>
     <updated>2016-01-16T07:18:26.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="charCodeAt_by_Lua">charCodeAt  by Lua</h1><p>@(Lua JavaScript charCodeAt)</p>
+    <content type="html"><![CDATA[<h1 id="charCodeAt_by_Lua"><a href="#charCodeAt_by_Lua" class="headerlink" title="charCodeAt  by Lua"></a>charCodeAt  by Lua</h1><p>@(Lua JavaScript charCodeAt)</p>
 <blockquote>
 <p>I wanted to have a function <code>charCodeAt</code>  in  <strong>Lua</strong> ,and it should works exactly like <code>javascript</code><br>but with Lua5.1 ,UTF8 and Unicode are not supported,</p>
 </blockquote>
-<h3 id="1:_how_charCodeAt_works_in_javascript">1: how charCodeAt works  in javascript</h3><p><code>to show Console  press F12 in Chrome( MAC:CMD+alt+J)</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"><span class="string">'你'</span>.charCodeAt(<span class="number">0</span>),</span><br><span class="line"><span class="string">'ñ'</span>.charCodeAt(<span class="number">0</span>),</span><br><span class="line"><span class="string">'n'</span>.charCodeAt(<span class="number">0</span>)</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<h3 id="1_3A_how_charCodeAt_works_in_javascript"><a href="#1_3A_how_charCodeAt_works_in_javascript" class="headerlink" title="1: how charCodeAt works  in javascript"></a>1: how charCodeAt works  in javascript</h3><p><code>to show Console  press F12 in Chrome( MAC:CMD+alt+J)</code><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"><span class="string">'你'</span>.charCodeAt(<span class="number">0</span>),</span><br><span class="line"><span class="string">'ñ'</span>.charCodeAt(<span class="number">0</span>),</span><br><span class="line"><span class="string">'n'</span>.charCodeAt(<span class="number">0</span>)</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
 <p> it will output [20320, 241, 110]  ，its the value of Unicode ,  ‘你’=20320 , ‘ñ’=241, ‘n’=110. </p>
 <blockquote>
 <p>The charCodeAt() method returns the numeric Unicode value of the character at the given index (except for unicode codepoints &gt; 0x10000).</p>
@@ -68,12 +68,12 @@
 </table>
 <p>according to  alexander-yakushev  we can know how many bytes one UTF8 word takes using function <code>utf8.charbytes</code><br> [<a href="https://github.com/alexander-yakushev/awesompd/blob/master/utf8.lua" target="_blank" rel="external">https://github.com/alexander-yakushev/awesompd/blob/master/utf8.lua</a>]<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">utf8.charbytes</span> <span class="params">(s, i)</span></span></span><br><span class="line">   <span class="comment">-- argument defaults</span></span><br><span class="line">   i = i <span class="keyword">or</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">local</span> c = <span class="built_in">string</span>.byte(s, i) </span><br><span class="line">   <span class="comment">-- determine bytes needed for character, based on RFC 3629</span></span><br><span class="line">   <span class="keyword">if</span> c &gt; <span class="number">0</span> <span class="keyword">and</span> c &lt;= <span class="number">127</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-1 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">194</span> <span class="keyword">and</span> c &lt;= <span class="number">223</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-2 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">224</span> <span class="keyword">and</span> c &lt;= <span class="number">239</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-3 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">240</span> <span class="keyword">and</span> c &lt;= <span class="number">244</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-4 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">4</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
 <figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">H = Math.floor((c-<span class="number">0x10000</span>) / <span class="number">0x400</span>)+<span class="number">0xD800</span> </span><br><span class="line">L = (c - <span class="number">0x10000</span>) % <span class="number">0x400</span> + <span class="number">0xDC00</span></span><br></pre></td></tr></table></figure>
-<h4 id="Title">Title</h4><p><strong>Marxico</strong> would adopt the first heading encountered as the note title. For example, in this manual the first line <code>Welcome to Marxico</code> is the title.</p>
-<h4 id="Quick_Editing">Quick Editing</h4><p>Note saved by <strong>Marxico</strong> in Evernote would have a red ribbon button on the top-right corner. Click it and it would bring you back to <strong>Marxico</strong> to edit the note. </p>
+<h4 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h4><p><strong>Marxico</strong> would adopt the first heading encountered as the note title. For example, in this manual the first line <code>Welcome to Marxico</code> is the title.</p>
+<h4 id="Quick_Editing"><a href="#Quick_Editing" class="headerlink" title="Quick Editing"></a>Quick Editing</h4><p>Note saved by <strong>Marxico</strong> in Evernote would have a red ribbon button on the top-right corner. Click it and it would bring you back to <strong>Marxico</strong> to edit the note. </p>
 <blockquote>
 <p><strong>Note:</strong> Currently <strong>Marxico</strong> is unable to detect and merge any modifications in Evernote by user. Please go back to <strong>Marxico</strong> to edit.</p>
 </blockquote>
-<h4 id="Data_Synchronization">Data Synchronization</h4><p>While saving rich HTML content in Evernote, <strong>Marxico</strong> puts the Markdown text in a hidden area of the note, which makes it possible to get the original text in <strong>Marxico</strong> and edit it again. This is a really brilliant design because:</p>
+<h4 id="Data_Synchronization"><a href="#Data_Synchronization" class="headerlink" title="Data Synchronization"></a>Data Synchronization</h4><p>While saving rich HTML content in Evernote, <strong>Marxico</strong> puts the Markdown text in a hidden area of the note, which makes it possible to get the original text in <strong>Marxico</strong> and edit it again. This is a really brilliant design because:</p>
 <ul>
 <li>it is beyond just one-way exporting HTML which other services do;</li>
 <li>and it avoids privacy and security problems caused by storing content in a intermediate server. </li>
@@ -81,26 +81,24 @@
 <blockquote>
 <p><strong>Privacy Statement: All of your notes data are saved in Evernote. Marxico doesn’t save any of them.</strong> </p>
 </blockquote>
-<h4 id="Offline_Storage">Offline Storage</h4><p><strong>Marxico</strong> stores your unsynchronized content locally in browser storage, so no worries about network and broswer crash. It also keeps the recent file list you’ve edited in <code>Document Management(Ctrl + O)</code>.</p>
+<h4 id="Offline_Storage"><a href="#Offline_Storage" class="headerlink" title="Offline Storage"></a>Offline Storage</h4><p><strong>Marxico</strong> stores your unsynchronized content locally in browser storage, so no worries about network and broswer crash. It also keeps the recent file list you’ve edited in <code>Document Management(Ctrl + O)</code>.</p>
 <blockquote>
 <p><strong>Note:</strong> Although browser storage is reliable in the most time, Evernote is born to do that. So please sync the document regularly while writing.</p>
 </blockquote>
-<h2 id="Shortcuts">Shortcuts</h2><p>Help    <code>Ctrl + /</code><br>Sync Doc    <code>Ctrl + S</code><br>Create Doc    <code>Ctrl + Alt + N</code><br>Maximize Editor    <code>Ctrl + Enter</code><br>Preview Doc <code>Ctrl + Alt + Enter</code><br>Doc Management    <code>Ctrl + O</code><br>Menu    <code>Ctrl + M</code></p>
+<h2 id="Shortcuts"><a href="#Shortcuts" class="headerlink" title="Shortcuts"></a>Shortcuts</h2><p>Help    <code>Ctrl + /</code><br>Sync Doc    <code>Ctrl + S</code><br>Create Doc    <code>Ctrl + Alt + N</code><br>Maximize Editor    <code>Ctrl + Enter</code><br>Preview Doc <code>Ctrl + Alt + Enter</code><br>Doc Management    <code>Ctrl + O</code><br>Menu    <code>Ctrl + M</code></p>
 <p>Bold    <code>Ctrl + B</code><br>Insert Image    <code>Ctrl + G</code><br>Insert Link    <code>Ctrl + L</code><br>Convert Heading    <code>Ctrl + H</code></p>
-<h2 id="About_Pro">About Pro</h2><p><strong>Marixo</strong> offers a free trial of 10 days. After that, you need to <a href="http://marxi.co/purchase.html" target="_blank" rel="external">purchase</a> the Pro service. Otherwise, you would not be able to sync new notes. Previous notes can be edited and synced all the time.</p>
-<h2 id="Credits">Credits</h2><p><strong>Marxico</strong> was first built upon <a href="http://dillinger.io" target="_blank" rel="external">Dillinger</a>, and the newest version is almost based on the awesome <a href="http://stackedit.io" target="_blank" rel="external">StackEdit</a>. Acknowledgments to them and other incredible open source projects!</p>
-<h2 id="Feedback_&amp;_Bug_Report">Feedback &amp; Bug Report</h2><ul>
+<h2 id="About_Pro"><a href="#About_Pro" class="headerlink" title="About Pro"></a>About Pro</h2><p><strong>Marixo</strong> offers a free trial of 10 days. After that, you need to <a href="http://marxi.co/purchase.html" target="_blank" rel="external">purchase</a> the Pro service. Otherwise, you would not be able to sync new notes. Previous notes can be edited and synced all the time.</p>
+<h2 id="Credits"><a href="#Credits" class="headerlink" title="Credits"></a>Credits</h2><p><strong>Marxico</strong> was first built upon <a href="http://dillinger.io" target="_blank" rel="external">Dillinger</a>, and the newest version is almost based on the awesome <a href="http://stackedit.io" target="_blank" rel="external">StackEdit</a>. Acknowledgments to them and other incredible open source projects!</p>
+<h2 id="Feedback__26amp_3B_Bug_Report"><a href="#Feedback__26amp_3B_Bug_Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
 <li>Twitter: <a href="https://twitter.com/gock2" target="_blank" rel="external">@gock2</a></li>
-<li>Email: <a href="&#109;&#97;&#105;&#108;&#x74;&#x6f;&#x3a;&#104;&#117;&#x73;&#x74;&#x67;&#x6f;&#x63;&#x6b;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#104;&#117;&#x73;&#x74;&#x67;&#x6f;&#x63;&#x6b;&#64;&#x67;&#x6d;&#x61;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a></li>
+<li>Email: <a href="/&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#104;&#x75;&#115;&#116;&#x67;&#111;&#x63;&#x6b;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;">&#104;&#x75;&#115;&#116;&#x67;&#111;&#x63;&#x6b;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#109;</a></li>
 </ul>
 <hr>
 <p>Thank you for reading this manual. Now please press <code>Ctrl + M</code> and click <code>Link with Evernote</code>. Enjoy your <strong>Marxico</strong> journey!</p>
 <p>[^demo]: This is a demo footnote. Read the <a href="https://github.com/fletcher/MultiMarkdown/wiki/MultiMarkdown-Syntax-Guide#footnotes" target="_blank" rel="external">MultiMarkdown Syntax Guide</a> to learn more. Note that Evernote disables ID attributes in its notes , so <code>footnote</code> and <code>TOC</code> are not actually working. </p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h1 id="charCodeAt_by_Lua">charCodeAt  by Lua</h1><p>@(Lua JavaScript charCodeAt)</p>
-<blockquote>
-<p>I wanted to have a function <code>char]]>
+    <![CDATA[<h1 id="charCodeAt_by_Lua"><a href="#charCodeAt_by_Lua" class="headerlink" title="charCodeAt  by Lua"></a>charCodeAt  by Lua</h1><p>@(Lua Ja]]>
     </summary>
     
       <category term="lua" scheme="http://www.hellotalk.org/tags/lua/"/>
@@ -168,12 +166,12 @@
 <p>设置relay log的清除方式（在每个slave节点上）：</p>
 <p>[root@192.168.0.80 ~]# mysql -e ‘set global relay_log_purge=0’<br>[root@192.168.0.70 ~]# mysql -e ‘set global relay_log_purge=0’</p>
 <p>2、masterha_check_ssh工具验证ssh信任登录是否成功</p>
-<p>[root@192.168.0.88 ~]# masterha_check_ssh —conf=/etc/masterha/app1.cnf</p>
+<p>[root@192.168.0.88 ~]# masterha_check_ssh –conf=/etc/masterha/app1.cnf</p>
 <p>注意：用ssh-keygen实现4台主机之间相互免密钥登录决定这一步是否成功。</p>
 <p>Wed Apr  23 22:10:01 2014 - [debug]   ok.<br>Wed Apr  23 22:10:01 2014 - [info] All SSH connection tests passed successfully.</p>
 <p>3、masterha_check_repl工具验证mysql复制是否成功</p>
-<p>[root@192.168.0.88 ~]# masterha_check_repl —conf=/etc/masterha/app1.cnf</p>
-<p>注意：上一篇文章中的master—slaver是否成功决定这一步是否成功。或是MHA文件配置的用户账号有关。</p>
+<p>[root@192.168.0.88 ~]# masterha_check_repl –conf=/etc/masterha/app1.cnf</p>
+<p>注意：上一篇文章中的master–slaver是否成功决定这一步是否成功。或是MHA文件配置的用户账号有关。</p>
 <p>port=3306 </p>
 <p>candidate_master=1</p>
 <p>master_binlog_dir=/data/mysql</p>
