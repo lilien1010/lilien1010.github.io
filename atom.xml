@@ -5,7 +5,7 @@
   <subtitle><![CDATA[大叔的微波炉，一锅乱炖]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://www.hellotalk.org//"/>
-  <updated>2016-01-16T07:18:26.000Z</updated>
+  <updated>2016-01-16T15:01:45.000Z</updated>
   <id>http://www.hellotalk.org//</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.hellotalk.org/2016/01/16/lua-charCodeAt/"/>
     <id>http://www.hellotalk.org/2016/01/16/lua-charCodeAt/</id>
     <published>2016-01-16T07:15:02.000Z</published>
-    <updated>2016-01-16T07:18:26.000Z</updated>
+    <updated>2016-01-16T15:01:45.000Z</updated>
     <content type="html"><![CDATA[<h1 id="charCodeAt_by_Lua"><a href="#charCodeAt_by_Lua" class="headerlink" title="charCodeAt  by Lua"></a>charCodeAt  by Lua</h1><p>@(Lua JavaScript charCodeAt)</p>
 <blockquote>
 <p>I wanted to have a function <code>charCodeAt</code>  in  <strong>Lua</strong> ,and it should works exactly like <code>javascript</code><br>but with Lua5.1 ,UTF8 and Unicode are not supported,</p>
@@ -91,7 +91,7 @@
 <h2 id="Credits"><a href="#Credits" class="headerlink" title="Credits"></a>Credits</h2><p><strong>Marxico</strong> was first built upon <a href="http://dillinger.io" target="_blank" rel="external">Dillinger</a>, and the newest version is almost based on the awesome <a href="http://stackedit.io" target="_blank" rel="external">StackEdit</a>. Acknowledgments to them and other incredible open source projects!</p>
 <h2 id="Feedback__26amp_3B_Bug_Report"><a href="#Feedback__26amp_3B_Bug_Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
 <li>Twitter: <a href="https://twitter.com/gock2" target="_blank" rel="external">@gock2</a></li>
-<li>Email: <a href="/&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x68;&#x75;&#115;&#x74;&#103;&#111;&#x63;&#107;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;">&#x68;&#x75;&#115;&#x74;&#103;&#111;&#x63;&#107;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#109;</a></li>
+<li>Email: <a href="/&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#104;&#x75;&#115;&#116;&#103;&#x6f;&#99;&#107;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#104;&#x75;&#115;&#116;&#103;&#x6f;&#99;&#107;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;</a></li>
 </ul>
 <hr>
 <p>Thank you for reading this manual. Now please press <code>Ctrl + M</code> and click <code>Link with Evernote</code>. Enjoy your <strong>Marxico</strong> journey!</p>
@@ -101,7 +101,11 @@
     <![CDATA[<h1 id="charCodeAt_by_Lua"><a href="#charCodeAt_by_Lua" class="headerlink" title="charCodeAt  by Lua"></a>charCodeAt  by Lua</h1><p>@(Lua Ja]]>
     </summary>
     
+      <category term="javascript" scheme="http://www.hellotalk.org/tags/javascript/"/>
+    
       <category term="lua" scheme="http://www.hellotalk.org/tags/lua/"/>
+    
+      <category term="拿码说事" scheme="http://www.hellotalk.org/categories/%E6%8B%BF%E7%A0%81%E8%AF%B4%E4%BA%8B/"/>
     
   </entry>
   
