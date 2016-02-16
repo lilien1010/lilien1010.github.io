@@ -41,17 +41,23 @@
   <link rel="shorticon icon" type="image/x-icon" href="/images/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="Github        here is the source code project , still coding">
+<meta name="description" content="###https://github.com/lilien1010/lua-aes
+some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
+like encrypt with PHP:1mcrypt_encrypt(MCRY">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lua-mcrypt-functions">
 <meta property="og:url" content="http://blog.hellotalk.org/2015/08/15/lua-mcrypt-functions/index.html">
 <meta property="og:site_name" content="李大锤的窝">
-<meta property="og:description" content="Github        here is the source code project , still coding">
+<meta property="og:description" content="###https://github.com/lilien1010/lua-aes
+some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
+like encrypt with PHP:1mcrypt_encrypt(MCRY">
 <meta property="og:image" content="https://img.shields.io/github/forks/JSLite/JSLite.svg">
-<meta property="og:updated_time" content="2016-01-16T07:17:03.000Z">
+<meta property="og:updated_time" content="2016-02-16T11:20:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lua-mcrypt-functions">
-<meta name="twitter:description" content="Github        here is the source code project , still coding">
+<meta name="twitter:description" content="###https://github.com/lilien1010/lua-aes
+some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
+like encrypt with PHP:1mcrypt_encrypt(MCRY">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -221,7 +227,12 @@
       
 
       
-        <span itemprop="articleBody"><article class="article_index"><br><h4><i class="icon-github-alt"></i>Github</h4><br><p><br>    <a target="_blank" href="https://github.com/lilien1010/lua_mcrypt"><img src="https://img.shields.io/github/forks/JSLite/JSLite.svg"></a><br><br>    here is the source code project , still coding<br></p><br></article>
+        <span itemprop="articleBody"><p>###<code>https://github.com/lilien1010/lua-aes</code></p>
+<p>some phper maybe find that the libraries in nginx-lua is not enough,<br>like aes mcrypt with ECB mode,<br>so  I create this.</p>
+<p>like encrypt with PHP:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mcrypt_encrypt(MCRYPT_RIJNDAEL_128, <span class="variable">$key</span>,<span class="variable">$text</span>, MCRYPT_MODE_ECB );</span><br></pre></td></tr></table></figure></p>
+<p>encrypt with lua:<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> data      =   <span class="string">'wait to be encrypted'</span></span><br><span class="line"><span class="keyword">local</span> key       =   <span class="string">'01234567890123456'</span> <span class="comment">--length is 16</span></span><br><span class="line"><span class="keyword">local</span> mc_ecb    = <span class="built_in">require</span>(<span class="string">"resty.ecb_mcrypt"</span>)</span><br><span class="line"><span class="keyword">local</span> ecb       = mc_ecb:new();</span><br><span class="line"><span class="keyword">local</span> enc_data  = ecb:encrypt(key,data );</span><br><span class="line">ngx.<span class="built_in">print</span>(enc_data)</span><br><span class="line"><span class="comment">--  you must use 'ngx.print' rather then 'ngx.say'</span></span><br><span class="line"><span class="comment">-- while 'ngx.say' will append a '\n'  at the end of string</span></span><br></pre></td></tr></table></figure></p>
+<p>mean while,you will need to install libmcrypt,<br>because the lua-aes will load  the libmcrypt with FFI,<br>try to install libmcrypt<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum <span class="keyword">install</span> libmcrypt libmcrypt-devel</span><br></pre></td></tr></table></figure></p>
+<article class="article_index"><br><h4><i class="icon-github-alt"></i>Github</h4><br><p><br>    <a target="_blank" href="https://github.com/lilien1010/lua_mcrypt"><img src="https://img.shields.io/github/forks/JSLite/JSLite.svg"></a><br><br>    here is the source code project , still coding<br></p><br></article>
 </span>
       
     </div>
