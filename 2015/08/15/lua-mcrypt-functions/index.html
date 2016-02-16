@@ -41,23 +41,23 @@
   <link rel="shorticon icon" type="image/x-icon" href="/images/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="###https://github.com/lilien1010/lua-aes
+<meta name="description" content="repohttps://github.com/lilien1010/lua-aes
 some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
-like encrypt with PHP:1mcrypt_encrypt(MCRY">
+like encrypt with PHP:1mcrypt_encrypt(MCR">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lua-mcrypt-functions">
 <meta property="og:url" content="http://blog.hellotalk.org/2015/08/15/lua-mcrypt-functions/index.html">
 <meta property="og:site_name" content="李大锤的窝">
-<meta property="og:description" content="###https://github.com/lilien1010/lua-aes
+<meta property="og:description" content="repohttps://github.com/lilien1010/lua-aes
 some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
-like encrypt with PHP:1mcrypt_encrypt(MCRY">
+like encrypt with PHP:1mcrypt_encrypt(MCR">
 <meta property="og:image" content="https://img.shields.io/github/forks/JSLite/JSLite.svg">
-<meta property="og:updated_time" content="2016-02-16T11:20:52.000Z">
+<meta property="og:updated_time" content="2016-02-16T11:22:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lua-mcrypt-functions">
-<meta name="twitter:description" content="###https://github.com/lilien1010/lua-aes
+<meta name="twitter:description" content="repohttps://github.com/lilien1010/lua-aes
 some phper maybe find that the libraries in nginx-lua is not enough,like aes mcrypt with ECB mode,so  I create this.
-like encrypt with PHP:1mcrypt_encrypt(MCRY">
+like encrypt with PHP:1mcrypt_encrypt(MCR">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -227,7 +227,7 @@ like encrypt with PHP:1mcrypt_encrypt(MCRY">
       
 
       
-        <span itemprop="articleBody"><p>###<code>https://github.com/lilien1010/lua-aes</code></p>
+        <span itemprop="articleBody"><h3 id="repo"><a href="#repo" class="headerlink" title="repo"></a>repo</h3><p><a href="https://github.com/lilien1010/lua-aes" target="_blank" rel="external">https://github.com/lilien1010/lua-aes</a></p>
 <p>some phper maybe find that the libraries in nginx-lua is not enough,<br>like aes mcrypt with ECB mode,<br>so  I create this.</p>
 <p>like encrypt with PHP:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mcrypt_encrypt(MCRYPT_RIJNDAEL_128, <span class="variable">$key</span>,<span class="variable">$text</span>, MCRYPT_MODE_ECB );</span><br></pre></td></tr></table></figure></p>
 <p>encrypt with lua:<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> data      =   <span class="string">'wait to be encrypted'</span></span><br><span class="line"><span class="keyword">local</span> key       =   <span class="string">'01234567890123456'</span> <span class="comment">--length is 16</span></span><br><span class="line"><span class="keyword">local</span> mc_ecb    = <span class="built_in">require</span>(<span class="string">"resty.ecb_mcrypt"</span>)</span><br><span class="line"><span class="keyword">local</span> ecb       = mc_ecb:new();</span><br><span class="line"><span class="keyword">local</span> enc_data  = ecb:encrypt(key,data );</span><br><span class="line">ngx.<span class="built_in">print</span>(enc_data)</span><br><span class="line"><span class="comment">--  you must use 'ngx.print' rather then 'ngx.say'</span></span><br><span class="line"><span class="comment">-- while 'ngx.say' will append a '\n'  at the end of string</span></span><br></pre></td></tr></table></figure></p>
@@ -371,7 +371,7 @@ like encrypt with PHP:1mcrypt_encrypt(MCRY">
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Github</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#repo"><span class="nav-number">1.</span> <span class="nav-text">repo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.1.</span> <span class="nav-text">Github</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

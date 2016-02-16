@@ -291,7 +291,7 @@
 <p>###code is here<br><a href="https://github.com/lilien1010/lua-bit" target="_blank" rel="external">https://github.com/lilien1010/lua-bit</a></p>
 <h2 id="Feedback__26amp_3B_Bug_Report"><a href="#Feedback__26amp_3B_Bug_Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
 <li>Twitter: [@lilien1010]</li>
-<li>Email: <a href="/&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#108;&#105;&#x6c;&#x69;&#101;&#x6e;&#x31;&#x30;&#49;&#x30;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;">&#108;&#105;&#x6c;&#x69;&#101;&#x6e;&#x31;&#x30;&#49;&#x30;&#64;&#103;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#109;</a></li>
+<li>Email: <a href="/&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x6c;&#105;&#x6c;&#105;&#101;&#110;&#49;&#x30;&#49;&#x30;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x6c;&#105;&#x6c;&#105;&#101;&#110;&#49;&#x30;&#49;&#x30;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#x6d;</a></li>
 </ul>
 <hr>
 <p>Thank you for reading this  , if you got any better idea,  I’m glad to hear from you </p>
@@ -363,7 +363,7 @@
 
       
         
-          <span itemprop="articleBody"><p>###<code>https://github.com/lilien1010/lua-aes</code></p>
+          <span itemprop="articleBody"><h3 id="repo"><a href="#repo" class="headerlink" title="repo"></a>repo</h3><p><a href="https://github.com/lilien1010/lua-aes" target="_blank" rel="external">https://github.com/lilien1010/lua-aes</a></p>
 <p>some phper maybe find that the libraries in nginx-lua is not enough,<br>like aes mcrypt with ECB mode,<br>so  I create this.</p>
 <p>like encrypt with PHP:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mcrypt_encrypt(MCRYPT_RIJNDAEL_128, <span class="variable">$key</span>,<span class="variable">$text</span>, MCRYPT_MODE_ECB );</span><br></pre></td></tr></table></figure></p>
 <p>encrypt with lua:<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> data      =   <span class="string">'wait to be encrypted'</span></span><br><span class="line"><span class="keyword">local</span> key       =   <span class="string">'01234567890123456'</span> <span class="comment">--length is 16</span></span><br><span class="line"><span class="keyword">local</span> mc_ecb    = <span class="built_in">require</span>(<span class="string">"resty.ecb_mcrypt"</span>)</span><br><span class="line"><span class="keyword">local</span> ecb       = mc_ecb:new();</span><br><span class="line"><span class="keyword">local</span> enc_data  = ecb:encrypt(key,data );</span><br><span class="line">ngx.<span class="built_in">print</span>(enc_data)</span><br><span class="line"><span class="comment">--  you must use 'ngx.print' rather then 'ngx.say'</span></span><br><span class="line"><span class="comment">-- while 'ngx.say' will append a '\n'  at the end of string</span></span><br></pre></td></tr></table></figure></p>
