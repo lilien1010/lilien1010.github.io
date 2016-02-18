@@ -5,7 +5,7 @@
   <subtitle><![CDATA[大叔的微波炉，一锅乱炖]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://blog.hellotalk.org//"/>
-  <updated>2016-02-16T11:26:39.000Z</updated>
+  <updated>2016-02-18T15:18:04.000Z</updated>
   <id>http://blog.hellotalk.org//</id>
   
   <author>
@@ -14,6 +14,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[加速mysqldump 的导入速度]]></title>
+    <link href="http://blog.hellotalk.org/2016/02/18/%E5%8A%A0%E9%80%9Fmysqldump-%E7%9A%84%E5%AF%BC%E5%85%A5%E9%80%9F%E5%BA%A6/"/>
+    <id>http://blog.hellotalk.org/2016/02/18/加速mysqldump-的导入速度/</id>
+    <published>2016-02-18T15:15:52.000Z</published>
+    <updated>2016-02-18T15:18:04.000Z</updated>
+    <content type="html"><![CDATA[<p> 有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。<br> 可以执行以下命令来提高速度</p>
+<blockquote>
+<p>mysql&gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;<br>mysql&gt; source /path/to/dump.sql<br>mysql&gt; commit; set unique_checks=1; set foreign_key_checks=1;</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p> 有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。<br> 可以执行以下命令来提高速度</p>
+<blockquote>
+<p>mysql&gt; set auto]]>
+    </summary>
+    
+      <category term="mysql" scheme="http://blog.hellotalk.org/tags/mysql/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[charCodeAt by Lua]]></title>
@@ -74,7 +95,7 @@
 <p>###<a href="https://github.com/lilien1010/lua-bit" target="_blank" rel="external">https://github.com/lilien1010/lua-bit</a></p>
 <h2 id="Feedback__26amp_3B_Bug_Report"><a href="#Feedback__26amp_3B_Bug_Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
 <li>Twitter: [@lilien1010]</li>
-<li>Email: <a href="/&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x6c;&#105;&#x6c;&#x69;&#x65;&#110;&#49;&#48;&#x31;&#x30;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x6c;&#105;&#x6c;&#x69;&#x65;&#110;&#49;&#48;&#x31;&#x30;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+<li>Email: <a href="/&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#108;&#x69;&#x6c;&#105;&#x65;&#110;&#49;&#x30;&#49;&#48;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#108;&#x69;&#x6c;&#105;&#x65;&#110;&#49;&#x30;&#49;&#48;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></li>
 </ul>
 <hr>
 <p>Thank you for reading this  , if you got any better idea,  I’m glad to hear from you </p>

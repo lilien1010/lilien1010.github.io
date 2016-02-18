@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://blog.hellotalk.org/2016/02/18/%E5%8A%A0%E9%80%9Fmysqldump-%E7%9A%84%E5%AF%BC%E5%85%A5%E9%80%9F%E5%BA%A6/</loc>
+    <lastmod>2016-02-18T15:18:04.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://blog.hellotalk.org/2015/08/15/lua-mcrypt-functions/</loc>
     <lastmod>2016-02-16T12:14:55.000Z</lastmod>
   </url>

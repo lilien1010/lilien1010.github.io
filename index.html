@@ -186,6 +186,78 @@
           
           
             
+              <a class="post-title-link" href="/2016/02/18/加速mysqldump-的导入速度/" itemprop="url">
+                加速mysqldump 的导入速度
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          發表於
+          <time itemprop="dateCreated" datetime="2016-02-18T23:15:52+08:00" content="2016-02-18">
+            2016-02-18
+          </time>
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+              &nbsp; | &nbsp;
+              <a href="/2016/02/18/加速mysqldump-的导入速度/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/加速mysqldump-的导入速度/" itemprop="commentsCount"></span>
+              </a>
+            </span>
+          
+        
+      </div>
+    </header>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody"><p> 有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。<br> 可以执行以下命令来提高速度</p>
+<blockquote>
+<p>mysql&gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;<br>mysql&gt; source /path/to/dump.sql<br>mysql&gt; commit; set unique_checks=1; set foreign_key_checks=1;</p>
+</blockquote>
+</span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      
+      
+        <h1 class="post-title" itemprop="name headline">
+          
+          
+            
               <a class="post-title-link" href="/2016/01/16/lua-charCodeAt/" itemprop="url">
                 charCodeAt by Lua
               </a>
@@ -292,7 +364,7 @@
 <p>###<a href="https://github.com/lilien1010/lua-bit" target="_blank" rel="external">https://github.com/lilien1010/lua-bit</a></p>
 <h2 id="Feedback__26amp_3B_Bug_Report"><a href="#Feedback__26amp_3B_Bug_Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
 <li>Twitter: [@lilien1010]</li>
-<li>Email: <a href="/&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x6c;&#105;&#x6c;&#x69;&#x65;&#110;&#49;&#48;&#x31;&#x30;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;">&#x6c;&#105;&#x6c;&#x69;&#x65;&#110;&#49;&#48;&#x31;&#x30;&#64;&#103;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+<li>Email: <a href="/&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#108;&#x69;&#x6c;&#105;&#x65;&#110;&#49;&#x30;&#49;&#48;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#108;&#x69;&#x6c;&#105;&#x65;&#110;&#49;&#x30;&#49;&#48;&#x40;&#x67;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;</a></li>
 </ul>
 <hr>
 <p>Thank you for reading this  , if you got any better idea,  I’m glad to hear from you </p>
@@ -705,7 +777,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-count">6</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

@@ -30,7 +30,7 @@
 
 
 
-  <meta name="keywords" content="Hellotalk,Lien,PHP,lua,nginx,c++,mysql,openresty" />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -41,16 +41,22 @@
   <link rel="shorticon icon" type="image/x-icon" href="/images/favicon.ico?v=0.4.5.1" />
 
 
-<meta name="description" content="Hello World，Talk to me">
+<meta name="description" content="有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。 可以执行以下命令来提高速度
+
+mysql&amp;gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;mysql&amp;gt; source /path/to/dump.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql">
-<meta property="og:url" content="http://blog.hellotalk.org/2015/06/22/Mysql/index.html">
+<meta property="og:title" content="加速mysqldump 的导入速度">
+<meta property="og:url" content="http://blog.hellotalk.org/2016/02/18/加速mysqldump-的导入速度/index.html">
 <meta property="og:site_name" content="李大锤的窝">
-<meta property="og:description" content="Hello World，Talk to me">
-<meta property="og:updated_time" content="2015-06-22T05:41:26.000Z">
+<meta property="og:description" content="有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。 可以执行以下命令来提高速度
+
+mysql&amp;gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;mysql&amp;gt; source /path/to/dump.">
+<meta property="og:updated_time" content="2016-02-18T15:18:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql">
-<meta name="twitter:description" content="Hello World，Talk to me">
+<meta name="twitter:title" content="加速mysqldump 的导入速度">
+<meta name="twitter:description" content="有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。 可以执行以下命令来提高速度
+
+mysql&amp;gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;mysql&amp;gt; source /path/to/dump.">
 
 
 <script type="text/javascript" id="hexo.configuration">
@@ -60,7 +66,7 @@
   };
 </script>
 
-  <title> Mysql | 李大锤的窝 </title>
+  <title> 加速mysqldump 的导入速度 | 李大锤的窝 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="">
@@ -185,7 +191,7 @@
           
           
             
-              Mysql
+              加速mysqldump 的导入速度
             
           
         </h1>
@@ -194,8 +200,8 @@
       <div class="post-meta">
         <span class="post-time">
           發表於
-          <time itemprop="dateCreated" datetime="2015-06-22T13:41:26+08:00" content="2015-06-22">
-            2015-06-22
+          <time itemprop="dateCreated" datetime="2016-02-18T23:15:52+08:00" content="2016-02-18">
+            2016-02-18
           </time>
         </span>
 
@@ -205,8 +211,8 @@
           
             <span class="post-comments-count">
               &nbsp; | &nbsp;
-              <a href="/2015/06/22/Mysql/#comments" itemprop="discussionUrl">
-                <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/22/Mysql/" itemprop="commentsCount"></span>
+              <a href="/2016/02/18/加速mysqldump-的导入速度/#comments" itemprop="discussionUrl">
+                <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/18/加速mysqldump-的导入速度/" itemprop="commentsCount"></span>
               </a>
             </span>
           
@@ -220,24 +226,32 @@
       
 
       
-        <span itemprop="articleBody"></span>
+        <span itemprop="articleBody"><p> 有时候我们从其他数据库部署数据到一个新的机器上面的时候，通过mysql的source 命令导入 mysqldump 导出的数据，数据量很大的时候，速度会很慢。<br> 可以执行以下命令来提高速度</p>
+<blockquote>
+<p>mysql&gt; set autocommit=0; set unique_checks=0; set foreign_key_checks=0;<br>mysql&gt; source /path/to/dump.sql<br>mysql&gt; commit; set unique_checks=1; set foreign_key_checks=1;</p>
+</blockquote>
+</span>
       
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
+          
+        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/06/22/Mysql数据库MHA高可用部署/" rel="prev">Mysql数据库MHA高可用部署</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/06/22/how-to-build-this/" rel="next">how-to-build-this</a>
+              <a href="/2016/01/16/lua-charCodeAt/" rel="next">charCodeAt by Lua</a>
             
           </div>
         </div>
@@ -262,8 +276,8 @@
         
           <div class="comments" id="comments">
             
-              <div class="ds-thread" data-thread-key="2015/06/22/Mysql/"
-                   data-title="Mysql" data-url="http://blog.hellotalk.org/2015/06/22/Mysql/">
+              <div class="ds-thread" data-thread-key="2016/02/18/加速mysqldump-的导入速度/"
+                   data-title="加速mysqldump 的导入速度" data-url="http://blog.hellotalk.org/2016/02/18/加速mysqldump-的导入速度/">
               </div>
             
           </div>
