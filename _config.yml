@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Lien Li\' Blog
+title: Lien Li\'s Blog
 subtitle: 'what ever in your mind, write it down'
 description: ''
 keywords:
@@ -97,9 +97,10 @@ ignore:
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: jekyll-theme-leap-day
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: 'git'
+  repo: git@github.com:lilien1010/lilien1010.github.io.git
