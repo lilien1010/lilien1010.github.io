@@ -14,7 +14,7 @@ content_max_width: 800px
 
 # Sidebar
 author:
-  name: Sanonz
+  name: Lien Li
   work: Web Developer &amp; Designer
   location: Shenzhen, China
   avatar_url: /images/avatar.jpg
@@ -22,9 +22,7 @@ author:
 # Links:
 links:
   - svg: ./source/svg/_github.svg
-    url: https://github.com/sanonz
-  - svg: ./source/svg/_more.svg
-    url: http://weibo.com/sanonz
+    url: https://github.com/lilien1010
   - svg: ./source/svg/_twitter.svg
     url: https://twitter.com/sanonze
 
