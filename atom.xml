@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Lien Li&#39;s Blog</title>
+  
+  <subtitle>what ever in your mind, write it down</subtitle>
+  <link href="http://blog.hellotalk.org/atom.xml" rel="self"/>
+  
+  <link href="http://blog.hellotalk.org/"/>
+  <updated>2022-09-29T01:57:17.741Z</updated>
+  <id>http://blog.hellotalk.org/</id>
+  
+  <author>
+    <name>Lien Li</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2022最新保姆级教程-带娃去新加坡要怎么给孩子办理疫苗公证-VERIFICATION OF VACCINATION？！</title>
+    <link href="http://blog.hellotalk.org/2022/09/29/2022%E6%9C%80%E6%96%B0%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B-%E5%B8%A6%E5%A8%83%E5%8E%BB%E6%96%B0%E5%8A%A0%E5%9D%A1%E8%A6%81%E6%80%8E%E4%B9%88%E7%BB%99%E5%AD%A9%E5%AD%90%E5%8A%9E%E7%90%86%E7%96%AB%E8%8B%97%E5%85%AC%E8%AF%81-VERIFICATION-OF-VACCINATION%EF%BC%9F%EF%BC%81/"/>
+    <id>http://blog.hellotalk.org/2022/09/29/2022%E6%9C%80%E6%96%B0%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B-%E5%B8%A6%E5%A8%83%E5%8E%BB%E6%96%B0%E5%8A%A0%E5%9D%A1%E8%A6%81%E6%80%8E%E4%B9%88%E7%BB%99%E5%AD%A9%E5%AD%90%E5%8A%9E%E7%90%86%E7%96%AB%E8%8B%97%E5%85%AC%E8%AF%81-VERIFICATION-OF-VACCINATION%EF%BC%9F%EF%BC%81/</id>
+    <published>2022-09-29T01:52:34.000Z</published>
+    <updated>2022-09-29T01:57:17.741Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;保姆级教程-带娃去新加坡要怎么给孩子办理疫苗公证？！&quot;&gt;&lt;a href=&quot;#保姆级教程-带娃去新加坡要怎么给孩子办理疫苗公证？！&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Build a specialized fields Chinese full-text search engine with Elasticsearch/IKAnalysis/jieba</title>
+    <link href="http://blog.hellotalk.org/2021/04/14/Build-a-specialized-fields-Chinese-full-text-search-engine-with-Elasticsearch-IKAnalysis-jieba/"/>
+    <id>http://blog.hellotalk.org/2021/04/14/Build-a-specialized-fields-Chinese-full-text-search-engine-with-Elasticsearch-IKAnalysis-jieba/</id>
+    <published>2021-04-14T11:26:13.000Z</published>
+    <updated>2022-09-29T01:40:13.710Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Background&quot;&gt;&lt;a href=&quot;#Background&quot; class=&quot;headerlink&quot; title=&quot;Background&quot;&gt;&lt;/a&gt;Background&lt;/h2&gt;&lt;p&gt;  Many projects often need a search</summary>
+        
+      
+    
+    
+    
+    
+    <category term="backend" scheme="http://blog.hellotalk.org/tags/backend/"/>
+    
+    <category term="Elasticsearch" scheme="http://blog.hellotalk.org/tags/Elasticsearch/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Fix React-Native Project build issues, ld: library not found for -lCocoaAsyncSocket</title>
+    <link href="http://blog.hellotalk.org/2021/04/13/Fix-React-Native-Project-build-issues-ld-library-not-found-for-lCocoaAsyncSocket/"/>
+    <id>http://blog.hellotalk.org/2021/04/13/Fix-React-Native-Project-build-issues-ld-library-not-found-for-lCocoaAsyncSocket/</id>
+    <published>2021-04-13T03:20:10.000Z</published>
+    <updated>2022-09-29T01:40:13.710Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;During my work with xcode to build my RN app, I was having a linker issue this:&lt;br&gt;&lt;code&gt;ld: library not found for</summary>
+        
+      
+    
+    
+    
+    
+    <category term="frontend" scheme="http://blog.hellotalk.org/tags/frontend/"/>
+    
+    <category term="ReactNative" scheme="http://blog.hellotalk.org/tags/ReactNative/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Deploy Apache APISIX on Kubesphere 3.0</title>
+    <link href="http://blog.hellotalk.org/2021/04/11/Deploy-Apache-APISIX-on-Kubesphere-3-0/"/>
+    <id>http://blog.hellotalk.org/2021/04/11/Deploy-Apache-APISIX-on-Kubesphere-3-0/</id>
+    <published>2021-04-11T14:24:19.000Z</published>
+    <updated>2022-09-29T01:40:13.710Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Golang 动态加载 protobuffer 文件之动态解析pb二进制数据,输出JSON</title>
+    <link href="http://blog.hellotalk.org/2021/04/11/Golang-%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD-protobuffer-%E6%96%87%E4%BB%B6%E4%B9%8B%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90pb%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE-%E8%BE%93%E5%87%BAJSON/"/>
+    <id>http://blog.hellotalk.org/2021/04/11/Golang-%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD-protobuffer-%E6%96%87%E4%BB%B6%E4%B9%8B%E5%8A%A8%E6%80%81%E8%A7%A3%E6%9E%90pb%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E6%8D%AE-%E8%BE%93%E5%87%BAJSON/</id>
+    <published>2021-04-11T14:13:22.000Z</published>
+    <updated>2022-09-29T01:40:13.711Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;在业务中经常有这种需求，给某某服务加一个命令字，用来接收的RPC 请求来的protobuffer数据，按照某个pb数据定义反序列化之后，转成JSON</summary>
+        
+      
+    
+    
+    
+    
+    <category term="backend" scheme="http://blog.hellotalk.org/tags/backend/"/>
+    
+    <category term="Golang" scheme="http://blog.hellotalk.org/tags/Golang/"/>
+    
+    <category term="Protobuffer" scheme="http://blog.hellotalk.org/tags/Protobuffer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>About Me</title>
+    <link href="http://blog.hellotalk.org/2021/04/06/About-Me/"/>
+    <id>http://blog.hellotalk.org/2021/04/06/About-Me/</id>
+    <published>2021-04-06T09:14:15.000Z</published>
+    <updated>2022-09-29T01:40:13.710Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;ul&gt;
+&lt;li&gt;Shopify Engineer&lt;/li&gt;
+&lt;li&gt;Apahce APISIX PMC&lt;/li&gt;
+&lt;li&gt;KubeSphere Member&lt;/li&gt;
+&lt;li&gt;Openresty Contributor&lt;/li&gt;
+&lt;li&gt;Anyway, can be a</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>使用 Github Action 自动发布Docker镜像到 Dockerhub</title>
+    <link href="http://blog.hellotalk.org/2021/03/13/%E4%BD%BF%E7%94%A8-Github-Action-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83%E9%95%9C%E5%83%8F%E5%88%B0Dockerhub/"/>
+    <id>http://blog.hellotalk.org/2021/03/13/%E4%BD%BF%E7%94%A8-Github-Action-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83%E9%95%9C%E5%83%8F%E5%88%B0Dockerhub/</id>
+    <published>2021-03-13T03:24:46.000Z</published>
+    <updated>2022-09-29T01:40:13.711Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;因为工作需要 用到自定义的 PHP+Openresty 镜像, 所以自建构建了一个镜像存放在dockerhub。&lt;/p&gt;
+&lt;p&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    
+    <category term="Docker" scheme="http://blog.hellotalk.org/tags/Docker/"/>
+    
+    <category term="Github" scheme="http://blog.hellotalk.org/tags/Github/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MySql的MHA高可用部署</title>
+    <link href="http://blog.hellotalk.org/2017/03/17/MySql%E7%9A%84MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/"/>
+    <id>http://blog.hellotalk.org/2017/03/17/MySql%E7%9A%84MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/</id>
+    <published>2017-03-17T14:04:50.000Z</published>
+    <updated>2022-09-29T01:40:13.711Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    
+    <category term="backend" scheme="http://blog.hellotalk.org/tags/backend/"/>
+    
+    <category term="Mysql" scheme="http://blog.hellotalk.org/tags/Mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenResty 里面的 AES 加密之ECB模式</title>
+    <link href="http://blog.hellotalk.org/2017/03/11/OpenResty-%E9%87%8C%E9%9D%A2%E7%9A%84-AES-%E5%8A%A0%E5%AF%86%E4%B9%8BECB%E6%A8%A1%E5%BC%8F/"/>
+    <id>http://blog.hellotalk.org/2017/03/11/OpenResty-%E9%87%8C%E9%9D%A2%E7%9A%84-AES-%E5%8A%A0%E5%AF%86%E4%B9%8BECB%E6%A8%A1%E5%BC%8F/</id>
+    <published>2017-03-11T14:11:50.000Z</published>
+    <updated>2022-09-29T01:40:13.711Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;###先上地址（代码将就着用吧O(∩_∩)O哈哈~）&lt;br&gt;###&lt;a</summary>
+        
+      
+    
+    
+    
+    
+    <category term="backend" scheme="http://blog.hellotalk.org/tags/backend/"/>
+    
+    <category term="Openresty" scheme="http://blog.hellotalk.org/tags/Openresty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lua-charCodeAt</title>
+    <link href="http://blog.hellotalk.org/2016/01/06/lua-charCodeAt/"/>
+    <id>http://blog.hellotalk.org/2016/01/06/lua-charCodeAt/</id>
+    <published>2016-01-06T14:02:42.000Z</published>
+    <updated>2022-09-29T01:40:13.711Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;JS函数charCodeAt的Lua实现&lt;/p&gt;
+&lt;h1 id=&quot;charCodeAt-by-Lua&quot;&gt;&lt;a href=&quot;#charCodeAt-by-Lua&quot; class=&quot;headerlink&quot; title=&quot;charCodeAt  by</summary>
+        
+      
+    
+    
+    
+    
+    <category term="backend" scheme="http://blog.hellotalk.org/tags/backend/"/>
+    
+    <category term="Openresty" scheme="http://blog.hellotalk.org/tags/Openresty/"/>
+    
+  </entry>
+  
+</feed>
