@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>MySql的MHA高可用部署 | Lien Li&#39;s Blog</title>
+    <meta name="author" content="Lien Li" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="背景1：先来说一下为什么会出现这种方案，以及这个方案是怎么回事儿？只要是个服务，就都有宕机的可能，Mysql也不例外，为了让各位运维、DBA、和全栈工程师晚上能睡个安稳觉，有更多的时间和女朋友么么哒，我们希望数据库服务器在宕机的时候能自动恢复过来，最少的影响用户的体验，留下更多的奖金买001。这个时候我们的MHA（Mysql Highe Available）大显身手了，他的原理就一句话：在Mysql的主从架构下，当主库挂掉的时候，自动将备库升级为主库，同时为其他备库重新设置新的主库。假设我们有服" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    
+    <link rel="alternate" href="/atom.xml" title="Lien Li&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/images/apple-icon-72x72.png">
+    
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'icomoon';
+        src: url("/fonts/icomoon.eot?q628ml");
+        src: url("/fonts/icomoon.eot?q628ml#iefix") format('embedded-opentype'),
+             url("/fonts/icomoon.ttf?q628ml") format('truetype'),
+             url("/fonts/icomoon.woff?q628ml") format('woff'),
+             url("/fonts/icomoon.svg?q628ml#icomoon") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!--[if lt IE 9]><style type="text/css">.nav-inner {top:0;}.author-meta {position:static;top:0;}.search-form {height:36px;}</style><script type="text/javascript" src="https://unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+<meta name="generator" content="Hexo 5.4.2"></head>
+<body>
+
+    <main class="app">
+        <header id="header" class="header clearfix">
+    <div id="nav" class="nav">
+    <div class="nav-mobile">
+        <button id="open-panel" class="open-panel nav-mobile-item"><i class="icon-documents"></i></button>
+        <h1 class="nav-mobile-title nav-mobile-item">Lien Li&#39;s Blog</h1>
+        <button id="open-menus" class="open-panel nav-mobile-item"><i class="icon-library"></i></button>
+    </div>
+
+    <nav id="nav-inner" class="nav-inner">
+        
+            <a class="nav-item" href="/">
+                <span class="nav-text">Home</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/frontend">
+                <span class="nav-text">Frontend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/backend">
+                <span class="nav-text">Backend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags">
+                <span class="nav-text">Tags</span>
+            </a>
+        
+            <a class="nav-item" href="/archives">
+                <span class="nav-text">Archives</span>
+            </a>
+        
+            <a class="nav-item" href="/atom.xml">
+                <span class="nav-text">RSS</span>
+            </a>
+        
+            <a class="nav-item" href="/about">
+                <span class="nav-text">About</span>
+            </a>
+        
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://blog.hellotalk.org"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content">
+            <div id="wrapper" class="wrapper" style="max-width: 800px">
+                <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            MySql的MHA高可用部署
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="http://blog.hellotalk.org/2017/03/17/MySql%E7%9A%84MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2017-03-17T14:04:50.000Z" itemprop="datePublished">2017-03-17</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/Mysql/" rel="tag">Mysql</a>, <a class="article-tag-link" href="/tags/backend/" rel="tag">backend</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><p>1：先来说一下为什么会出现这种方案，以及这个方案是怎么回事儿？</p>
+<p>只要是个服务，就都有宕机的可能，Mysql也不例外，为了让各位运维、DBA、和全栈工程师晚上能睡个安稳觉，有更多的时间和女朋友么么哒，我们希望数据库服务器在宕机的时候能自动恢复过来，最少的影响用户的体验，留下更多的奖金买001。</p>
+<p>这个时候我们的MHA（Mysql Highe Available）大显身手了，他的原理就一句话：在Mysql的主从架构下，当主库挂掉的时候，自动将备库升级为主库，同时为其他备库重新设置新的主库。</p>
+<p>假设我们有服务器<br>A：192.168.1.60  (主库)<br>B：192.168.1.70（备库，备主[主库宕机的情况,提升B为主库]）<br>C：192.168.1.80（备库2）<br>D：192.168.1.88 （manager，MHA管理中心，安装MHA manager，在主库和备库上面都需要安装MHA node，manager管理node）</p>
+<p>让B C 成为A的 slave 机 就不在这里介绍了，很简单的配置.</p>
+<p>2：具体原理如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">（1）从宕机崩溃的master保存二进制日志事件（binlog events）;</span><br><span class="line"></span><br><span class="line">（2）识别含有最新更新的slave；</span><br><span class="line"></span><br><span class="line">（3）应用差异的中继日志（relay log）到其他的slave；</span><br><span class="line"></span><br><span class="line">（4）应用从master保存的二进制日志事件（binlog events）；</span><br><span class="line"></span><br><span class="line">（5）提升一个slave为新的master；</span><br><span class="line"></span><br><span class="line">（6）使其他的slave连接新的master进行复制；</span><br></pre></td></tr></table></figure>
+
+
+<p>3：MHA的安装，因为MHA的功能是通过perl脚本来实现的，所以我们要安装perl环境</p>
+<p>A: 让A B C D四台机子互相无密码登陆</p>
+<p>查看A B C D 主机 /root/.ssh/ 下面有没有 id_rsa.pub 文件</p>
+<p>如果没有从新生成 ssh-keygen -t rsa -b 2048 </p>
+<p>然后通过scp命令拷贝到其他三台机子，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.1.88 ~]# scp id_rsa.pub root@192.168.1.60:/root/.ssh/ //复制到主机60</span><br><span class="line"></span><br><span class="line">[root@192.168.1.60 ~]# cat id_rsa.pub &gt;&gt; authorized_keys</span><br></pre></td></tr></table></figure>
+<p>安装必要的perl库，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.1.88 ~]# yum install cpan perl</span><br><span class="line">[root@192.168.1.88 ~]# yum -y install perl-MIME-Lite perl-Params-Validate perl-DBD-MySQL perl-Config-Tiny perl-Log-Dispatch perl-Parallel-ForkManager perl-Time-HiRes</span><br><span class="line">[root@192.168.1.88 ~]# wget ftp://ftp.muug.mb.ca/mirror/centos/6.5/os/x86_64/Packages/compat-db43-4.3.29-15.el6.x86_64.rpm</span><br><span class="line">[root@192.168.1.88 ~]# wget http://downloads.naulinux.ru/pub/NauLinux/6x/i386/sites/School/RPMS/perl-Log-Dispatch-2.27-1.el6.noarch.rpm</span><br><span class="line">[root@192.168.1.88 ~]# wget http://dl.fedoraproject.org/pub/epel/6/i386/perl-Parallel-ForkManager-0.7.9-1.el6.noarch.rpm</span><br><span class="line">[root@192.168.1.88 ~]# wget http://dl.fedoraproject.org/pub/epel/6/i386/perl-Mail-Sender-0.8.16-3.el6.noarch.rpm</span><br><span class="line">[root@192.168.1.88 ~]# wget http://dl.fedoraproject.org/pub/epel/6/i386/perl-Mail-Sendmail-0.79-12.el6.noarch.rpm</span><br><span class="line">[root@192.168.1.88 ~]# wget http://mirror.centos.org/centos/6/os/x86_64/Packages/perl-Time-HiRes-1.9721-136.el6.x86_64.rpm</span><br><span class="line"></span><br><span class="line">[root@192.168.1.88 ~]# rpm -ivh perl-Parallel-ForkManager-0.7.9-1.el6.noarch.rpm perl-Log-Dispatch-2.27-1.el6.noarch.rpm perl-Mail-Sender-0.8.16-3.el6.noarch.rpm perl-Mail-Sendmail-0.79-12.el6.noarch.rpm perl-Time-HiRes-1.9721-136.el6.x86_64.rpm</span><br><span class="line"></span><br><span class="line">再安装MHA manager（在192.168.1.88上）</span><br><span class="line"></span><br><span class="line">[root@192.168.1.88 ~]# wget https://downloads.mariadb.com/files/MHA/mha4mysql-manager-0.55-0.el6.noarch.rpm </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@192.168.1.88 ~]# rpm -ivh mha4mysql-manager-0.55-0.el6.noarch.rpm</span><br><span class="line"></span><br><span class="line">安装过程中会出现一些缺失的库，自己再去找对应的库就好了；</span><br><span class="line"></span><br><span class="line">再在从库安装MHA node（在192.168.1.50、192.168.1.60、192.168.1.70，A、B、C上）</span><br><span class="line"></span><br><span class="line">[root@A-B-C ~]#wget https://downloads.mariadb.com/files/MHA/mha4mysql-node-0.54-0.el6.noarch.rpm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[root@A-B-C~]#rpm -ivh mha4mysql-node-0.54-0.el6.noarch.rpm</span><br><span class="line"></span><br><span class="line">（缺失perl库的话，按第一步来装好）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>配置Manager</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; mkdir -p /masterha/app1    //创建app目录，用来存放临时数据文件，</span><br><span class="line">shell&gt; mkdir /etc/masterha        //创建目录，配置文件目录</span><br><span class="line">shell&gt; vi /etc/masterha/app1.cnf  //创建配置文件</span><br><span class="line">[server default]</span><br><span class="line">user=root                //linux用于管理mysql用戶名</span><br><span class="line">password=123456          //linux用于管理mysql密码</span><br><span class="line">manager_workdir=/masterha/app1</span><br><span class="line">manager_log=/masterha/app1/manager.log</span><br><span class="line">remote_workdir=/masterha/app1</span><br><span class="line">ssh_user=root            //ssh免密钥登录的帐号名</span><br><span class="line">repl_user=slaver         //mysql复制帐号，用来在主从机之间同步二进制日志等</span><br><span class="line">repl_password=slaver     //mysql密码</span><br><span class="line">ping_interval=1          //ping间隔，用来检测master是否正常</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[server2]</span><br><span class="line">hostname=192.168.1.70 </span><br><span class="line">port=3306 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[server3]</span><br><span class="line">hostname=192.168.1.80</span><br><span class="line">port=3306 </span><br></pre></td></tr></table></figure>
+
+<p>设置relay log的清除方式（在每个slave节点上）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.0.80 ~]# mysql -e &#x27;set global relay_log_purge=0&#x27;</span><br><span class="line">[root@192.168.0.70 ~]# mysql -e &#x27;set global relay_log_purge=0’</span><br></pre></td></tr></table></figure>
+
+
+
+
+<p>2、masterha_check_ssh工具验证ssh信任登录是否成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.0.88 ~]# masterha_check_ssh --conf=/etc/masterha/app1.cnf</span><br></pre></td></tr></table></figure>
+
+
+<p>注意：用ssh-keygen实现4台主机之间相互免密钥登录决定这一步是否成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Wed Apr  23 22:10:01 2014 - [debug]   ok.</span><br><span class="line">Wed Apr  23 22:10:01 2014 - [info] All SSH connection tests passed successfully.</span><br></pre></td></tr></table></figure>
+
+
+
+<p>3、masterha_check_repl工具验证mysql复制是否成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@192.168.0.88 ~]# masterha_check_repl --conf=/etc/masterha/app1.cnf</span><br></pre></td></tr></table></figure>
+
+<p>注意：上一篇文章中的master–slaver是否成功决定这一步是否成功。或是MHA文件配置的用户账号有关。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">port=3306 </span><br><span class="line">candidate_master=1</span><br><span class="line">master_binlog_dir=/data/mysql</span><br><span class="line">[server1]</span><br><span class="line">hostname=192.168.1.60</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Wed Apr 23 22:10:56 2014 - [info] Checking replication health on 192.168.1.232..</span><br><span class="line">Wed Apr 23 22:10:56 2014 - [info]  ok.</span><br><span class="line">Wed Apr 23 22:10:56 2014 - [warning] master_ip_failover_script is not defined.</span><br><span class="line">Wed Apr 23 22:10:56 2014 - [warning] shutdown_script is not defined.</span><br><span class="line">Wed Apr 23 22:10:56 2014 - [info] Got exit code 0 (Not master dead).</span><br><span class="line"></span><br><span class="line">MySQL Replication Health is OK</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在出库上面停止mysql，模拟宕机的情况 </p>
+<p>[<a href="mailto:&#114;&#111;&#111;&#116;&#x40;&#x31;&#x39;&#x32;&#46;&#x31;&#54;&#x38;&#x2e;&#48;&#46;&#x36;&#48;">&#114;&#111;&#111;&#116;&#x40;&#x31;&#x39;&#x32;&#46;&#x31;&#54;&#x38;&#x2e;&#48;&#46;&#x36;&#48;</a> ~]#service mysql stop</p>
+<p>我们可以在 manager 机器上面看到输出的日志</p>
+<p>[<a href="mailto:&#x72;&#111;&#x6f;&#x74;&#x40;&#x31;&#57;&#50;&#x2e;&#x31;&#x36;&#x38;&#46;&#48;&#x2e;&#x38;&#x38;">&#x72;&#111;&#x6f;&#x74;&#x40;&#x31;&#57;&#50;&#x2e;&#x31;&#x36;&#x38;&#46;&#48;&#x2e;&#x38;&#x38;</a> ~]tail -f /masterha/app1/manager.log</p>
+
+        
+    </section>
+</article>
+
+
+
+<a id="pagenext" href="/2017/03/11/OpenResty-%E9%87%8C%E9%9D%A2%E7%9A%84-AES-%E5%8A%A0%E5%AF%86%E4%B9%8BECB%E6%A8%A1%E5%BC%8F/" class="article-next" title="OpenResty 里面的 AES 加密之ECB模式"><i class="icon-arrow-right"></i></a>
+
+
+<a id="pageprev" href="/2021/03/13/%E4%BD%BF%E7%94%A8-Github-Action-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83%E9%95%9C%E5%83%8F%E5%88%B0Dockerhub/" class="article-prev" title="使用 Github Action 自动发布Docker镜像到 Dockerhub"><i class="icon-arrow-left"></i></a>
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "216f44fe4eed95b6ca0d",
+        clientSecret: "a3a880921fa4799d062dae8b25f6def7621078b5",
+        repo: "lilien1010.github.io",
+        owner: "lilien1010",
+        admin: ["lilien1010"],
+        id: "3e8acef0cc5019688648bff7dc6df921",
+        distractionFreeMode: true,
+        title: "MySql的MHA高可用部署",
+        body: "http://blog.hellotalk.org/2017/03/17/MySql%E7%9A%84MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/",
+        labels: ["backend","Mysql"]
+    }).render('comments');
+    </script>
+</div>
+
+
+
+            </div>
+        </div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?54b70fad0249c2f4ed1e062b7961facb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    
+</footer>
+
+    </main>
+
+    <script type="text/javascript" src="https://unpkg.com/jquery@1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var nodes = {
+            nav: $('#nav'),
+            aside: $('#aside'),
+            asideInner: $('#aside-inner'),
+            navInner: $('#nav-inner')
+        };
+
+        var doing = false;
+        nodes.asideInner.on('webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend', function() {
+            if (nodes.aside.hasClass('mobile-open')) {
+                nodes.aside.removeClass('mobile-open');
+            } else {
+                nodes.aside.removeClass('mobile-close panel-show');
+            }
+            doing = false;
+        });
+        $('#open-panel, #aside-mask').on('click', function() {
+            if (doing) {
+                return;
+            }
+
+            if (nodes.aside.hasClass('panel-show')) {
+                nodes.aside.addClass('mobile-close');
+            } else {
+                nodes.aside.addClass('mobile-open panel-show');
+            }
+        });
+        $('#open-menus').on('click', function() {
+            nodes.navInner.slideToggle('normal', slideDone);
+        });
+
+        if (window.innerWidth <= 960) {
+            setTimeout(function() {
+                nodes.navInner.slideUp('normal', slideDone);
+            }, 3000);
+        }
+
+        function slideDone() {
+            if (nodes.navInner.css('display') !== 'none') {
+                nodes.navInner.css('display', '');
+            }
+        }
+
+        $(window).on('resize', function() {
+            if ($(this).width() > 960) {
+                nodes.navInner.css('display', '');
+            }
+        });
+    });
+    </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
+    
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>lua-charCodeAt | Lien Li&#39;s Blog</title>
+    <meta name="author" content="Lien Li" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="JS函数charCodeAt的Lua实现charCodeAt  by Lua@(Lua JavaScript charCodeAt)I wanted to have a function charCodeAt  in  Lua ,and it should works exactly like javascriptbut with Lua5.1 ,UTF8 and Unicode are not supported,1: how charCodeAt works  in javascriptto" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    
+    <link rel="alternate" href="/atom.xml" title="Lien Li&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/images/apple-icon-72x72.png">
+    
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'icomoon';
+        src: url("/fonts/icomoon.eot?q628ml");
+        src: url("/fonts/icomoon.eot?q628ml#iefix") format('embedded-opentype'),
+             url("/fonts/icomoon.ttf?q628ml") format('truetype'),
+             url("/fonts/icomoon.woff?q628ml") format('woff'),
+             url("/fonts/icomoon.svg?q628ml#icomoon") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!--[if lt IE 9]><style type="text/css">.nav-inner {top:0;}.author-meta {position:static;top:0;}.search-form {height:36px;}</style><script type="text/javascript" src="https://unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+<meta name="generator" content="Hexo 5.4.2"></head>
+<body>
+
+    <main class="app">
+        <header id="header" class="header clearfix">
+    <div id="nav" class="nav">
+    <div class="nav-mobile">
+        <button id="open-panel" class="open-panel nav-mobile-item"><i class="icon-documents"></i></button>
+        <h1 class="nav-mobile-title nav-mobile-item">Lien Li&#39;s Blog</h1>
+        <button id="open-menus" class="open-panel nav-mobile-item"><i class="icon-library"></i></button>
+    </div>
+
+    <nav id="nav-inner" class="nav-inner">
+        
+            <a class="nav-item" href="/">
+                <span class="nav-text">Home</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/frontend">
+                <span class="nav-text">Frontend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/backend">
+                <span class="nav-text">Backend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags">
+                <span class="nav-text">Tags</span>
+            </a>
+        
+            <a class="nav-item" href="/archives">
+                <span class="nav-text">Archives</span>
+            </a>
+        
+            <a class="nav-item" href="/atom.xml">
+                <span class="nav-text">RSS</span>
+            </a>
+        
+            <a class="nav-item" href="/about">
+                <span class="nav-text">About</span>
+            </a>
+        
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://blog.hellotalk.org"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#charCodeAt-by-Lua"><span class="toc-number">1.</span> <span class="toc-text">charCodeAt  by Lua</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-how-charCodeAt-works-in-javascript"><span class="toc-number">1.0.1.</span> <span class="toc-text">1: how charCodeAt works  in javascript</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Unicode-amp-UTF8-convert-method"><span class="toc-number">1.0.1.1.</span> <span class="toc-text">Unicode &amp; UTF8 convert  method</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#special-Method"><span class="toc-number">1.0.2.</span> <span class="toc-text">special Method</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.0.2.1.</span> <span class="toc-text"></span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Feedback-amp-Bug-Report"><span class="toc-number">1.1.</span> <span class="toc-text">Feedback &amp; Bug Report</span></a></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content">
+            <div id="wrapper" class="wrapper" style="max-width: 800px">
+                <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            lua-charCodeAt
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="http://blog.hellotalk.org/2016/01/06/lua-charCodeAt/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2016-01-06T14:02:42.000Z" itemprop="datePublished">2016-01-06</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/Openresty/" rel="tag">Openresty</a>, <a class="article-tag-link" href="/tags/backend/" rel="tag">backend</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>JS函数charCodeAt的Lua实现</p>
+<h1 id="charCodeAt-by-Lua"><a href="#charCodeAt-by-Lua" class="headerlink" title="charCodeAt  by Lua"></a>charCodeAt  by Lua</h1><p>@(Lua JavaScript charCodeAt)</p>
+<blockquote>
+<p>I wanted to have a function <code>charCodeAt</code>  in  <strong>Lua</strong> ,and it should works exactly like <code>javascript</code><br>but with Lua5.1 ,UTF8 and Unicode are not supported,</p>
+</blockquote>
+<h3 id="1-how-charCodeAt-works-in-javascript"><a href="#1-how-charCodeAt-works-in-javascript" class="headerlink" title="1: how charCodeAt works  in javascript"></a>1: how charCodeAt works  in javascript</h3><p><code>to show Console  press F12 in Chrome( MAC:CMD+alt+J) </code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"><span class="string">&#x27;你&#x27;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>),</span><br><span class="line"><span class="string">&#x27;ñ&#x27;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>),</span><br><span class="line"><span class="string">&#x27;n&#x27;</span>.<span class="title function_">charCodeAt</span>(<span class="number">0</span>)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p> it will output [20320, 241, 110]  ，it means the numeric value of Unicode ,  ‘你’=20320 , ‘ñ’=241, ‘n’=110. </p>
+<blockquote>
+<p>The charCodeAt() method returns the numeric Unicode value of the character at the given index (except for unicode codepoints &gt; 0x10000).</p>
+</blockquote>
+<p>according to  alexander-yakushev  we can know how many bytes one UTF8 word takes using function <code>utf8.charbytes</code><br> [<a target="_blank" rel="noopener" href="https://github.com/alexander-yakushev/awesompd/blob/master/utf8.lua]">https://github.com/alexander-yakushev/awesompd/blob/master/utf8.lua]</a> </p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">utf8.charbytes</span> <span class="params">(s, i)</span></span></span><br><span class="line">   <span class="comment">-- argument defaults</span></span><br><span class="line">   i = i <span class="keyword">or</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">local</span> c = <span class="built_in">string</span>.<span class="built_in">byte</span>(s, i) </span><br><span class="line">   <span class="comment">-- determine bytes needed for character, based on RFC 3629</span></span><br><span class="line">   <span class="keyword">if</span> c &gt; <span class="number">0</span> <span class="keyword">and</span> c &lt;= <span class="number">127</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-1 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">194</span> <span class="keyword">and</span> c &lt;= <span class="number">223</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-2 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">2</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">224</span> <span class="keyword">and</span> c &lt;= <span class="number">239</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-3 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">3</span></span><br><span class="line">   <span class="keyword">elseif</span> c &gt;= <span class="number">240</span> <span class="keyword">and</span> c &lt;= <span class="number">244</span> <span class="keyword">then</span></span><br><span class="line">      <span class="comment">-- UTF8-4 byte</span></span><br><span class="line">      <span class="keyword">return</span> <span class="number">4</span></span><br><span class="line">   <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Unicode-amp-UTF8-convert-method"><a href="#Unicode-amp-UTF8-convert-method" class="headerlink" title="Unicode &amp; UTF8 convert  method"></a>Unicode &amp; UTF8 convert  method</h4><table>
+<thead>
+<tr>
+<th align="left">Unicode code range</th>
+<th align="left">UTF-8 code</th>
+<th align="left">example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">hex code</td>
+<td align="left">binary code</td>
+<td align="left">char</td>
+</tr>
+<tr>
+<td align="left">0000 0000-0000 007F</td>
+<td align="left">0xxxxxxx</td>
+<td align="left"><code>n</code>(alphabet)</td>
+</tr>
+<tr>
+<td align="left">0000 0000-0000 007F</td>
+<td align="left">110xxxxx 10xxxxxx</td>
+<td align="left"><code>ñ</code></td>
+</tr>
+<tr>
+<td align="left">0000 0080-0000 07FF</td>
+<td align="left">1110xxxx 10xxxxxx 10xxxxxx</td>
+<td align="left"><code>你</code>(most CJK)</td>
+</tr>
+<tr>
+<td align="left">0001 0000-0010 FFFF</td>
+<td align="left">11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+<td align="left"><code>other chars</code></td>
+</tr>
+</tbody></table>
+<p>but we should pay attention to  4 bytes UTF8[<code>emoji</code>], it works not that simple</p>
+<h3 id="special-Method"><a href="#special-Method" class="headerlink" title="special Method"></a>special Method</h3><p>javascript  engine using UTF16，characters in <code>Basic Multilingual Plane</code> were the same with unicode, but if the characters  were in   <code>Supplementary Plane</code>  it should use the formula below，usually we encounter <code>Supplementary Plane</code> emoji like😝 (4  byte UTF8 character)</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- formula 1</span></span><br><span class="line">H = Math.<span class="built_in">floor</span>((c<span class="number">-0x10000</span>) / <span class="number">0x400</span>)+<span class="number">0xD800</span> </span><br><span class="line">L = (c - <span class="number">0x10000</span>) % <span class="number">0x400</span> + <span class="number">0xDC00</span></span><br></pre></td></tr></table></figure>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4><p>###code is here<br>###<a target="_blank" rel="noopener" href="https://github.com/lilien1010/lua-bit">https://github.com/lilien1010/lua-bit</a></p>
+<h2 id="Feedback-amp-Bug-Report"><a href="#Feedback-amp-Bug-Report" class="headerlink" title="Feedback &amp; Bug Report"></a>Feedback &amp; Bug Report</h2><ul>
+<li>Twitter: <a target="_blank" rel="noopener" href="https://twitter.com/LeenuxLee">@LeenuxLee</a></li>
+<li>Email: <a href="mailto:&#108;&#x69;&#108;&#x69;&#x6e;&#x67;&#x40;&#x61;&#112;&#x61;&#x63;&#104;&#x65;&#46;&#x6f;&#114;&#103;">&#108;&#x69;&#108;&#x69;&#x6e;&#x67;&#x40;&#x61;&#112;&#x61;&#x63;&#104;&#x65;&#46;&#x6f;&#114;&#103;</a></li>
+</ul>
+<hr>
+<p>Thank you for reading this  , if you got any better idea, share it.</p>
+
+        
+    </section>
+</article>
+
+
+
+
+<a id="pageprev" href="/2017/03/11/OpenResty-%E9%87%8C%E9%9D%A2%E7%9A%84-AES-%E5%8A%A0%E5%AF%86%E4%B9%8BECB%E6%A8%A1%E5%BC%8F/" class="article-prev" title="OpenResty 里面的 AES 加密之ECB模式"><i class="icon-arrow-left"></i></a>
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "216f44fe4eed95b6ca0d",
+        clientSecret: "a3a880921fa4799d062dae8b25f6def7621078b5",
+        repo: "lilien1010.github.io",
+        owner: "lilien1010",
+        admin: ["lilien1010"],
+        id: "e7dcf88a455925e3cf3b23cd8eff1e60",
+        distractionFreeMode: true,
+        title: "lua-charCodeAt",
+        body: "http://blog.hellotalk.org/2016/01/06/lua-charCodeAt/",
+        labels: ["backend","Openresty"]
+    }).render('comments');
+    </script>
+</div>
+
+
+
+            </div>
+        </div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?54b70fad0249c2f4ed1e062b7961facb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    
+</footer>
+
+    </main>
+
+    <script type="text/javascript" src="https://unpkg.com/jquery@1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var nodes = {
+            nav: $('#nav'),
+            aside: $('#aside'),
+            asideInner: $('#aside-inner'),
+            navInner: $('#nav-inner')
+        };
+
+        var doing = false;
+        nodes.asideInner.on('webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend', function() {
+            if (nodes.aside.hasClass('mobile-open')) {
+                nodes.aside.removeClass('mobile-open');
+            } else {
+                nodes.aside.removeClass('mobile-close panel-show');
+            }
+            doing = false;
+        });
+        $('#open-panel, #aside-mask').on('click', function() {
+            if (doing) {
+                return;
+            }
+
+            if (nodes.aside.hasClass('panel-show')) {
+                nodes.aside.addClass('mobile-close');
+            } else {
+                nodes.aside.addClass('mobile-open panel-show');
+            }
+        });
+        $('#open-menus').on('click', function() {
+            nodes.navInner.slideToggle('normal', slideDone);
+        });
+
+        if (window.innerWidth <= 960) {
+            setTimeout(function() {
+                nodes.navInner.slideUp('normal', slideDone);
+            }, 3000);
+        }
+
+        function slideDone() {
+            if (nodes.navInner.css('display') !== 'none') {
+                nodes.navInner.css('display', '');
+            }
+        }
+
+        $(window).on('resize', function() {
+            if ($(this).width() > 960) {
+                nodes.navInner.css('display', '');
+            }
+        });
+    });
+    </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
+    
+
+</body>
+</html>

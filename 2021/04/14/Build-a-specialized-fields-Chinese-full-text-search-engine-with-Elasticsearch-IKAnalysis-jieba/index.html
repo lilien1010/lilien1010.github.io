@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>Build a specialized fields Chinese full-text search engine with Elasticsearch/IKAnalysis/jieba | Lien Li&#39;s Blog</title>
+    <meta name="author" content="Lien Li" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="Background  Many projects often need a search engine, but for Chinese content, we can not simply use MySQL like to search, especially for the professional field Chinese sentence search, we need specialized words from corpus to bring better search res" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    
+    <link rel="alternate" href="/atom.xml" title="Lien Li&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/images/apple-icon-72x72.png">
+    
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'icomoon';
+        src: url("/fonts/icomoon.eot?q628ml");
+        src: url("/fonts/icomoon.eot?q628ml#iefix") format('embedded-opentype'),
+             url("/fonts/icomoon.ttf?q628ml") format('truetype'),
+             url("/fonts/icomoon.woff?q628ml") format('woff'),
+             url("/fonts/icomoon.svg?q628ml#icomoon") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!--[if lt IE 9]><style type="text/css">.nav-inner {top:0;}.author-meta {position:static;top:0;}.search-form {height:36px;}</style><script type="text/javascript" src="https://unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+<meta name="generator" content="Hexo 5.4.2"></head>
+<body>
+
+    <main class="app">
+        <header id="header" class="header clearfix">
+    <div id="nav" class="nav">
+    <div class="nav-mobile">
+        <button id="open-panel" class="open-panel nav-mobile-item"><i class="icon-documents"></i></button>
+        <h1 class="nav-mobile-title nav-mobile-item">Lien Li&#39;s Blog</h1>
+        <button id="open-menus" class="open-panel nav-mobile-item"><i class="icon-library"></i></button>
+    </div>
+
+    <nav id="nav-inner" class="nav-inner">
+        
+            <a class="nav-item" href="/">
+                <span class="nav-text">Home</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/frontend">
+                <span class="nav-text">Frontend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/backend">
+                <span class="nav-text">Backend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags">
+                <span class="nav-text">Tags</span>
+            </a>
+        
+            <a class="nav-item" href="/archives">
+                <span class="nav-text">Archives</span>
+            </a>
+        
+            <a class="nav-item" href="/atom.xml">
+                <span class="nav-text">RSS</span>
+            </a>
+        
+            <a class="nav-item" href="/about">
+                <span class="nav-text">About</span>
+            </a>
+        
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://blog.hellotalk.org"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Background"><span class="toc-number">1.</span> <span class="toc-text">Background</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prerequisite"><span class="toc-number">2.</span> <span class="toc-text">Prerequisite</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#How-to-do-it"><span class="toc-number">3.</span> <span class="toc-text">How to do it</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-Elasticsearch-Kibana-IKAnalysis-with-Docker"><span class="toc-number">3.1.</span> <span class="toc-text">Install Elasticsearch&#x2F;Kibana&#x2F;IKAnalysis with Docker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Segmentation-get-Cosmetics-dic-from-corpus"><span class="toc-number">4.</span> <span class="toc-text">Segmentation (get Cosmetics.dic from corpus)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IK-Configration"><span class="toc-number">4.1.</span> <span class="toc-text">IK Configration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test-IK-Tokenazier"><span class="toc-number">5.</span> <span class="toc-text">Test IK Tokenazier</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ES-Configrations"><span class="toc-number">6.</span> <span class="toc-text">ES Configrations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Create-Index"><span class="toc-number">6.1.</span> <span class="toc-text">1: Create Index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Create-mapping-for-index-with-ik-smart"><span class="toc-number">6.2.</span> <span class="toc-text">2: Create mapping for index with ik_smart</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Insert-Data-to-ES"><span class="toc-number">6.3.</span> <span class="toc-text">3: Insert Data to ES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Search-Data-from-ES"><span class="toc-number">6.4.</span> <span class="toc-text">4: Search Data from ES</span></a></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content">
+            <div id="wrapper" class="wrapper" style="max-width: 800px">
+                <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            Build a specialized fields Chinese full-text search engine with Elasticsearch/IKAnalysis/jieba
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="http://blog.hellotalk.org/2021/04/14/Build-a-specialized-fields-Chinese-full-text-search-engine-with-Elasticsearch-IKAnalysis-jieba/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-04-14T11:26:13.000Z" itemprop="datePublished">2021-04-14</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/Elasticsearch/" rel="tag">Elasticsearch</a>, <a class="article-tag-link" href="/tags/backend/" rel="tag">backend</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><p>  Many projects often need a search engine, but for Chinese content, we can not simply use <code>MySQL like</code> to search, especially for the professional field Chinese sentence search, we need specialized words from corpus to bring better search result, because the Chinese words are not split with spaces, which requires us to do two things.</p>
+<ul>
+<li>1 Extract specialized words/vocabulary from corpus existed, such as brand, character names, you can also polish your dict manually.</li>
+<li>2 Import that specialized vocabulary into the search engine and the search engine(Elasticsearch) can index those keywords split by IK analyzer.</li>
+</ul>
+<h2 id="Prerequisite"><a href="#Prerequisite" class="headerlink" title="Prerequisite"></a>Prerequisite</h2><p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docs.html">Elasticsearch</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik">Elasticsearch Analysis Plugin: IK</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fxsjy/jieba">Jieba stutter, Chinese text segmentation tool</a></p>
+<p>Other Option: <a target="_blank" rel="noopener" href="https://github.com/NLPchina/ansj_seg">https://github.com/NLPchina/ansj_seg</a></p>
+<h2 id="How-to-do-it"><a href="#How-to-do-it" class="headerlink" title="How to do it"></a>How to do it</h2><h3 id="Install-Elasticsearch-Kibana-IKAnalysis-with-Docker"><a href="#Install-Elasticsearch-Kibana-IKAnalysis-with-Docker" class="headerlink" title="Install Elasticsearch/Kibana/IKAnalysis with Docker"></a>Install Elasticsearch/Kibana/IKAnalysis with Docker</h3><p>docker-compose.yml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">version: &#x27;2.2&#x27;</span><br><span class="line">services:</span><br><span class="line">  kibana:</span><br><span class="line">    image: docker.elastic.co/kibana/kibana:7.11.2</span><br><span class="line">    volumes:</span><br><span class="line">      - ./kibana.yml:/usr/share/kibana/config/kibana.yml</span><br><span class="line">    networks:</span><br><span class="line">      - elastic</span><br><span class="line">    ports:</span><br><span class="line">      - 9601:9601</span><br><span class="line">      - 8893:8893</span><br><span class="line">    environment:</span><br><span class="line">      SERVER_NAME: kibana.example.org</span><br><span class="line">      ELASTICSEARCH_HOSTS: http://172.17.0.3:9200</span><br><span class="line">  es01:</span><br><span class="line">    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.2</span><br><span class="line">    container_name: es01</span><br><span class="line">    environment:</span><br><span class="line">      - node.name=es01</span><br><span class="line">      - cluster.name=es-docker-cluster</span><br><span class="line">      - cluster.initial_master_nodes=es01</span><br><span class="line">      - bootstrap.memory_lock=true</span><br><span class="line">      - &quot;ES_JAVA_OPTS=-Xms4g -Xmx4g&quot;</span><br><span class="line">    ulimits:</span><br><span class="line">      memlock:</span><br><span class="line">        soft: -1</span><br><span class="line">        hard: -1</span><br><span class="line">    volumes:</span><br><span class="line">      - data01:/usr/share/elasticsearch/data</span><br><span class="line">      - ./plugin/ik:/usr/share/elasticsearch/plugins/ik</span><br><span class="line">    ports:</span><br><span class="line">      - 0.0.0.0:9200:9200</span><br><span class="line">    networks:</span><br><span class="line">      - elastic</span><br><span class="line"></span><br><span class="line">volumes:</span><br><span class="line">  data01:</span><br><span class="line">    driver: local</span><br><span class="line"></span><br><span class="line">networks:</span><br><span class="line">  elastic:</span><br><span class="line">    driver: bridge</span><br><span class="line">    ipam:</span><br><span class="line">      driver: default</span><br><span class="line">      config:</span><br><span class="line">        - subnet: 172.33.238.0/24</span><br></pre></td></tr></table></figure>
+
+<p>kibana.yml </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">server.port: 9601</span><br><span class="line">server.host: &quot;0.0.0.0&quot;</span><br><span class="line">enterpriseSearch.host: &quot;http://172.17.0.3:9200&quot;</span><br><span class="line">elasticsearch.hosts: &quot;http://172.17.0.3:9200&quot;</span><br></pre></td></tr></table></figure>
+
+<p>How directory looks like is below<br>We need download <code>elasticsearch-analysis-ik-7.11.2.zip</code> and unzip it in directory <code>plugin</code> as we mapped it in <code>volumes</code> in file <code>docker-compose.yml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">./</span><br><span class="line">├── docker-compose.yml</span><br><span class="line">├── kibana.yml</span><br><span class="line">└── plugin</span><br><span class="line">    └── ik</span><br><span class="line">        ├── commons-codec-1.9.jar</span><br><span class="line">        ├── commons-logging-1.2.jar</span><br><span class="line">        ├── config</span><br><span class="line">        │   ├── extra_main.dic</span><br><span class="line">        │   ├── extra_single_word.dic</span><br><span class="line">        │   ├── extra_single_word_full.dic</span><br><span class="line">        │   ├── extra_single_word_low_freq.dic</span><br><span class="line">        │   ├── extra_stopword.dic</span><br><span class="line">        │   ├── Cosmetics.dic</span><br><span class="line">        │   ├── IKAnalyzer.cfg.xml</span><br><span class="line">        │   ├── main.dic</span><br><span class="line">        │   ├── preposition.dic</span><br><span class="line">        │   ├── quantifier.dic</span><br><span class="line">        │   ├── stopword.dic</span><br><span class="line">        │   ├── suffix.dic</span><br><span class="line">        │   └── surname.dic</span><br><span class="line">        ├── elasticsearch-analysis-ik-7.11.2.jar</span><br><span class="line">        ├── elasticsearch-analysis-ik-7.11.2.zip</span><br><span class="line">        ├── httpclient-4.5.2.jar</span><br><span class="line">        ├── httpcore-4.4.4.jar</span><br><span class="line">        ├── plugin-descriptor.properties</span><br><span class="line">        └── plugin-security.policy</span><br></pre></td></tr></table></figure>
+
+<p><code>Cosmetics.dic</code> is the file that contains Chinese word that need to be tokenized.<br>here is the example of some cosmetics brands</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">烟酰胺</span><br><span class="line">抗蓝光</span><br><span class="line">康萃乐</span><br><span class="line">怡丽丝尔</span><br></pre></td></tr></table></figure>
+
+<h2 id="Segmentation-get-Cosmetics-dic-from-corpus"><a href="#Segmentation-get-Cosmetics-dic-from-corpus" class="headerlink" title="Segmentation (get Cosmetics.dic from corpus)"></a>Segmentation (get Cosmetics.dic from corpus)</h2><p>Here we need <a target="_blank" rel="noopener" href="https://github.com/fxsjy/jieba">Jieba Segmentation Tool</a> which is intent to built the best Python Chinese word segmentation module.<br>corpus need to be ready in with txt format.<br>the corpus should contains specialized Chinese words</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone github.com/fxsjy/jieba</span><br><span class="line">cd jieba/test</span><br><span class="line">python extract_tags_with_weight.py chinese-specialized-corpus.txt -k 10000 -w 1</span><br></pre></td></tr></table></figure>
+
+<p>take cosmetics corpus as an example, the result should like below, those result can import to <code>Cosmetics.dic</code>.</p>
+<p>if possible, with manually edited and refined keyword brings better search experience</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">tag: 50ml		 weight: 0.213126</span><br><span class="line">tag: 雅诗兰黛		 weight: 0.155035</span><br><span class="line">tag: ysl		 weight: 0.144286</span><br><span class="line">tag: 新版		 weight: 0.143799</span><br><span class="line">tag: 面霜		 weight: 0.139773</span><br><span class="line">tag: 100ml		 weight: 0.132471</span><br><span class="line">tag: 阿玛尼		 weight: 0.116844</span><br><span class="line">tag: 兰蔻		 weight: 0.114584</span><br><span class="line">tag: 粉底液		 weight: 0.113962</span><br><span class="line">tag: 香奈儿		 weight: 0.108075</span><br><span class="line">tag: 精华		 weight: 0.104448</span><br><span class="line">tag: 30ml		 weight: 0.100020</span><br><span class="line">tag: sk2		 weight: 0.099609</span><br><span class="line">tag: 科颜氏		 weight: 0.091035</span><br><span class="line">tag: 面膜		 weight: 0.089536</span><br><span class="line">tag: 洁面		 weight: 0.086686</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="IK-Configration"><a href="#IK-Configration" class="headerlink" title="IK Configration"></a>IK Configration</h3><p>plugin/ik/config/IKAnalyzer.cfg.xml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE properties SYSTEM &quot;http://java.sun.com/dtd/properties.dtd&quot;&gt;</span><br><span class="line">&lt;properties&gt;</span><br><span class="line">	&lt;comment&gt;IK Analyzer 扩展配置&lt;/comment&gt;</span><br><span class="line">	&lt;!--Users can configure their own extended dictionary here--&gt;</span><br><span class="line">	&lt;entry key=&quot;ext_dict&quot;&gt;/root/plugin/ik/config/huazhuangping.dic&lt;/entry&gt;</span><br><span class="line">	 &lt;!--Users can configure their own extended stop word dictionary here--&gt;</span><br><span class="line">	&lt;entry key=&quot;ext_stopwords&quot;&gt;&lt;/entry&gt;</span><br><span class="line">	&lt;!--Users can configure the remote extension link here --&gt;</span><br><span class="line">	&lt;entry key=&quot;remote_ext_dict&quot;&gt;https://xxxxxx/word_for_elasticsearch.txt&lt;/entry&gt;</span><br><span class="line">	&lt;!--The user can configure the remote extension stop word dictionary here--&gt;</span><br><span class="line">	&lt;!-- &lt;entry key=&quot;remote_ext_stopwords&quot;&gt;words_location&lt;/entry&gt; --&gt;</span><br><span class="line">&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Test-IK-Tokenazier"><a href="#Test-IK-Tokenazier" class="headerlink" title="Test IK Tokenazier"></a>Test IK Tokenazier</h2><p>Open kibana dev <a target="_blank" rel="noopener" href="http://kibana.xxx.com/app/dev_tools#/console">http://kibana.xxx.com/app/dev_tools#/console</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">POST yunzhaohuo_index/_analyze</span><br><span class="line">&#123;</span><br><span class="line">    &quot;analyzer&quot;: &quot;ik_smart&quot;,</span><br><span class="line">    &quot;text&quot;: &quot;纪梵希润唇抗蓝光&quot;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Here, we can see the parser has take effective, and the text above has been split into three different Chinese words</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;tokens&quot; : [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot; : &quot;纪梵希&quot;,</span><br><span class="line">      &quot;start_offset&quot; : 0,</span><br><span class="line">      &quot;end_offset&quot; : 3,</span><br><span class="line">      &quot;type&quot; : &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot; : 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot; : &quot;润唇&quot;,</span><br><span class="line">      &quot;start_offset&quot; : 3,</span><br><span class="line">      &quot;end_offset&quot; : 5,</span><br><span class="line">      &quot;type&quot; : &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot; : 1</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;token&quot; : &quot;抗蓝光&quot;,</span><br><span class="line">      &quot;start_offset&quot; : 5,</span><br><span class="line">      &quot;end_offset&quot; : 8,</span><br><span class="line">      &quot;type&quot; : &quot;CN_WORD&quot;,</span><br><span class="line">      &quot;position&quot; : 2</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="ES-Configrations"><a href="#ES-Configrations" class="headerlink" title="ES Configrations"></a>ES Configrations</h2><h3 id="1-Create-Index"><a href="#1-Create-Index" class="headerlink" title="1: Create Index"></a>1: Create Index</h3><p>run in Shell to create index</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http://localhost:9200/product_inventory</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Create-mapping-for-index-with-ik-smart"><a href="#2-Create-mapping-for-index-with-ik-smart" class="headerlink" title="2: Create mapping for index with ik_smart"></a>2: Create mapping for index with ik_smart</h3><p>Suppose we are creating a search engine for ecommercial with field <code>Id</code>,<code>product_desc</code><br>and <code>product_desc</code> is the field that we want to search with full-text.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST http://localhost:9200/product_inventory/_mapping -H &#x27;Content-Type:application/json&#x27; -d&#x27;&#123;</span><br><span class="line">      &quot;properties&quot; : &#123;</span><br><span class="line">        &quot;@timestamp&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;date&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Id&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;product_desc&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;text&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;ik_max_word&quot;,</span><br><span class="line">          &quot;search_analyzer&quot;: &quot;ik_max_word&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;price&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;long&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;updateTime&quot; : &#123;</span><br><span class="line">          &quot;type&quot; : &quot;date&quot;,</span><br><span class="line">          &quot;format&quot; : &quot;yyyy-MM-dd HH:mm:ss&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"> &#125;&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Insert-Data-to-ES"><a href="#3-Insert-Data-to-ES" class="headerlink" title="3: Insert Data to ES"></a>3: Insert Data to ES</h3><p>Run in kiaban <a target="_blank" rel="noopener" href="http://kibana.xxx.com/app/dev_tools#/console">Dev Console</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /product_inventory/_create/1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;product_desc&quot;:&quot;抗蓝光洗面奶&quot;,</span><br><span class="line">    &quot;price&quot;:&quot;3&quot;,</span><br><span class="line">    &quot;updateTime&quot;:&quot;2021-01-03 12:22:11&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="4-Search-Data-from-ES"><a href="#4-Search-Data-from-ES" class="headerlink" title="4: Search Data from ES"></a>4: Search Data from ES</h3><p>Search with _score sorted, you will see those result with _score.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /yunzhaohuo_index/_search?size=995&amp;from=0</span><br><span class="line">&#123;</span><br><span class="line">  </span><br><span class="line">    &quot;query&quot; : &#123;</span><br><span class="line">      &quot;match&quot;: &#123;</span><br><span class="line">         &quot;product_desc&quot;: &quot;抗蓝光&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;sort&quot;: &#123;</span><br><span class="line">      &quot;_score&quot; : &quot;desc&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        
+    </section>
+</article>
+
+
+
+<a id="pagenext" href="/2021/04/13/Fix-React-Native-Project-build-issues-ld-library-not-found-for-lCocoaAsyncSocket/" class="article-next" title="Fix React-Native Project build issues, ld: library not found for -lCocoaAsyncSocket"><i class="icon-arrow-right"></i></a>
+
+
+<a id="pageprev" href="/2022/09/29/2022%E6%9C%80%E6%96%B0%E4%BF%9D%E5%A7%86%E7%BA%A7%E6%95%99%E7%A8%8B-%E5%B8%A6%E5%A8%83%E5%8E%BB%E6%96%B0%E5%8A%A0%E5%9D%A1%E8%A6%81%E6%80%8E%E4%B9%88%E7%BB%99%E5%AD%A9%E5%AD%90%E5%8A%9E%E7%90%86%E7%96%AB%E8%8B%97%E5%85%AC%E8%AF%81-VERIFICATION-OF-VACCINATION%EF%BC%9F%EF%BC%81/" class="article-prev" title="2022最新保姆级教程-带娃去新加坡要怎么给孩子办理疫苗公证-VERIFICATION OF VACCINATION？！"><i class="icon-arrow-left"></i></a>
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "216f44fe4eed95b6ca0d",
+        clientSecret: "a3a880921fa4799d062dae8b25f6def7621078b5",
+        repo: "lilien1010.github.io",
+        owner: "lilien1010",
+        admin: ["lilien1010"],
+        id: "547884c8bc7b60506aa92d23cde6d159",
+        distractionFreeMode: true,
+        title: "Build a specialized fields Chinese full-text search engine with Elasticsearch/IKAnalysis/jieba",
+        body: "http://blog.hellotalk.org/2021/04/14/Build-a-specialized-fields-Chinese-full-text-search-engine-with-Elasticsearch-IKAnalysis-jieba/",
+        labels: ["backend","Elasticsearch"]
+    }).render('comments');
+    </script>
+</div>
+
+
+
+            </div>
+        </div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?54b70fad0249c2f4ed1e062b7961facb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    
+</footer>
+
+    </main>
+
+    <script type="text/javascript" src="https://unpkg.com/jquery@1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var nodes = {
+            nav: $('#nav'),
+            aside: $('#aside'),
+            asideInner: $('#aside-inner'),
+            navInner: $('#nav-inner')
+        };
+
+        var doing = false;
+        nodes.asideInner.on('webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend', function() {
+            if (nodes.aside.hasClass('mobile-open')) {
+                nodes.aside.removeClass('mobile-open');
+            } else {
+                nodes.aside.removeClass('mobile-close panel-show');
+            }
+            doing = false;
+        });
+        $('#open-panel, #aside-mask').on('click', function() {
+            if (doing) {
+                return;
+            }
+
+            if (nodes.aside.hasClass('panel-show')) {
+                nodes.aside.addClass('mobile-close');
+            } else {
+                nodes.aside.addClass('mobile-open panel-show');
+            }
+        });
+        $('#open-menus').on('click', function() {
+            nodes.navInner.slideToggle('normal', slideDone);
+        });
+
+        if (window.innerWidth <= 960) {
+            setTimeout(function() {
+                nodes.navInner.slideUp('normal', slideDone);
+            }, 3000);
+        }
+
+        function slideDone() {
+            if (nodes.navInner.css('display') !== 'none') {
+                nodes.navInner.css('display', '');
+            }
+        }
+
+        $(window).on('resize', function() {
+            if ($(this).width() > 960) {
+                nodes.navInner.css('display', '');
+            }
+        });
+    });
+    </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
+    
+
+</body>
+</html>

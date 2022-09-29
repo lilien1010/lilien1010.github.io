@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>使用 Github Action 自动发布Docker镜像到 Dockerhub | Lien Li&#39;s Blog</title>
+    <meta name="author" content="Lien Li" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="因为工作需要 用到自定义的 PHP+Openresty 镜像, 所以自建构建了一个镜像存放在dockerhub。Dockerhub:lilien1010/php_openrestyDockfile:php_openresty但是每次在 dockfile 里面添加修改一点东西 都要手动 发布image 到 dockerhub 很费时费力。所以可以用 github action 来完成自动化的工作。开通 Dockerhub tokenopen (https://hub.docker.com/sett" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+
+    
+    <link rel="alternate" href="/atom.xml" title="Lien Li&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/images/apple-icon-72x72.png">
+    
+
+    <style type="text/css">
+    @font-face {
+        font-family: 'icomoon';
+        src: url("/fonts/icomoon.eot?q628ml");
+        src: url("/fonts/icomoon.eot?q628ml#iefix") format('embedded-opentype'),
+             url("/fonts/icomoon.ttf?q628ml") format('truetype'),
+             url("/fonts/icomoon.woff?q628ml") format('woff'),
+             url("/fonts/icomoon.svg?q628ml#icomoon") format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    </style>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!--[if lt IE 9]><style type="text/css">.nav-inner {top:0;}.author-meta {position:static;top:0;}.search-form {height:36px;}</style><script type="text/javascript" src="https://unpkg.com/html5shiv@3.7.3/dist/html5shiv.min.js"></script><![endif]-->
+<meta name="generator" content="Hexo 5.4.2"></head>
+<body>
+
+    <main class="app">
+        <header id="header" class="header clearfix">
+    <div id="nav" class="nav">
+    <div class="nav-mobile">
+        <button id="open-panel" class="open-panel nav-mobile-item"><i class="icon-documents"></i></button>
+        <h1 class="nav-mobile-title nav-mobile-item">Lien Li&#39;s Blog</h1>
+        <button id="open-menus" class="open-panel nav-mobile-item"><i class="icon-library"></i></button>
+    </div>
+
+    <nav id="nav-inner" class="nav-inner">
+        
+            <a class="nav-item" href="/">
+                <span class="nav-text">Home</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/frontend">
+                <span class="nav-text">Frontend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags/backend">
+                <span class="nav-text">Backend</span>
+            </a>
+        
+            <a class="nav-item" href="/tags">
+                <span class="nav-text">Tags</span>
+            </a>
+        
+            <a class="nav-item" href="/archives">
+                <span class="nav-text">Archives</span>
+            </a>
+        
+            <a class="nav-item" href="/atom.xml">
+                <span class="nav-text">RSS</span>
+            </a>
+        
+            <a class="nav-item" href="/about">
+                <span class="nav-text">About</span>
+            </a>
+        
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://blog.hellotalk.org"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E9%80%9A-Dockerhub-token"><span class="toc-number">1.</span> <span class="toc-text">开通 Dockerhub token</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Github-%E7%A7%98%E9%92%A5"><span class="toc-number">2.</span> <span class="toc-text">配置 Github  秘钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Github-Action"><span class="toc-number">3.</span> <span class="toc-text">配置 Github Action</span></a></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content">
+            <div id="wrapper" class="wrapper" style="max-width: 800px">
+                <article class="article" itemscope itemprop="blogPost">
+    
+    <header class="article-header">
+        
+        <h1 itemprop="name">
+            使用 Github Action 自动发布Docker镜像到 Dockerhub
+        </h1>
+        
+        <div class="article-meta clearfix">
+            <a class="article-date" href="http://blog.hellotalk.org/2021/03/13/%E4%BD%BF%E7%94%A8-Github-Action-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83%E9%95%9C%E5%83%8F%E5%88%B0Dockerhub/index.html">
+    
+    <i class="icon-calendar vm"></i>
+    
+    <time class="vm" datetime="2021-03-13T03:24:46.000Z" itemprop="datePublished">2021-03-13</time>
+</a>
+
+            
+<div class="article-tag-list">
+    <i class="icon-tag vm"></i>
+    <a class="article-tag-link" href="/tags/Docker/" rel="tag">Docker</a>, <a class="article-tag-link" href="/tags/Github/" rel="tag">Github</a>
+</div>
+
+
+        </div>
+    </header>
+    
+    <section class="article-body markdown-body">
+        
+        <p>因为工作需要 用到自定义的 PHP+Openresty 镜像, 所以自建构建了一个镜像存放在dockerhub。</p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/repository/docker/lilien1010/php_openresty">Dockerhub:lilien1010/php_openresty</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/lilien1010/php_openresty">Dockfile:php_openresty</a></p>
+<p>但是每次在 dockfile 里面添加修改一点东西 都要手动 发布image 到 dockerhub 很费时费力。</p>
+<p>所以可以用 github action 来完成自动化的工作。</p>
+<h3 id="开通-Dockerhub-token"><a href="#开通-Dockerhub-token" class="headerlink" title="开通 Dockerhub token"></a>开通 Dockerhub token</h3><ul>
+<li>open (<a target="_blank" rel="noopener" href="https://hub.docker.com/settings/security)[https://hub.docker.com/settings/security]">https://hub.docker.com/settings/security)[https://hub.docker.com/settings/security]</a></li>
+<li>click New Access Token</li>
+</ul>
+<p>  <img src="/images/2021-04-13-11-30-10.png"></p>
+<h3 id="配置-Github-秘钥"><a href="#配置-Github-秘钥" class="headerlink" title="配置 Github  秘钥"></a>配置 Github  秘钥</h3><p>  把 dockhub 的用户名和 token 填写到 secrets 环境。</p>
+<p><img src="/images/2021-04-13-11-32-46.png"></p>
+<h3 id="配置-Github-Action"><a href="#配置-Github-Action" class="headerlink" title="配置 Github Action"></a>配置 Github Action</h3><p>  参考：<a target="_blank" rel="noopener" href="https://github.com/lilien1010/php_openresty/blob/master/.github/workflows/push_dockerhub.yml">workflows/push_dockerhub.yml</a></p>
+<p>  注意：下面的 DOCKERHUB_USERNAME 和 DOCKERHUB_TOKEN 这两个名字要和在 github repo setting 里面配置的 secrets 要一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">name: ci</span><br><span class="line"></span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches:</span><br><span class="line">      - &#x27;master&#x27;</span><br><span class="line"></span><br><span class="line">jobs:</span><br><span class="line">  docker:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      -</span><br><span class="line">        name: Checkout</span><br><span class="line">        uses: actions/checkout@v2</span><br><span class="line">      -</span><br><span class="line">        name: Set up QEMU</span><br><span class="line">        uses: docker/setup-qemu-action@v1</span><br><span class="line">      -</span><br><span class="line">        name: Set up Docker Buildx</span><br><span class="line">        uses: docker/setup-buildx-action@v1</span><br><span class="line">      -</span><br><span class="line">        name: Login to DockerHub</span><br><span class="line">        uses: docker/login-action@v1</span><br><span class="line">        with:</span><br><span class="line">          username: $&#123;&#123; secrets.DOCKERHUB_USERNAME &#125;&#125;</span><br><span class="line">          password: $&#123;&#123; secrets.DOCKERHUB_TOKEN &#125;&#125;</span><br><span class="line">      -</span><br><span class="line">        name: Build and push</span><br><span class="line">        uses: docker/build-push-action@v2</span><br><span class="line">        with:</span><br><span class="line">          context: .</span><br><span class="line">          push: true</span><br><span class="line">          tags: lilien1010/php_openresty:latest</span><br></pre></td></tr></table></figure>
+
+        
+    </section>
+</article>
+
+
+
+<a id="pagenext" href="/2017/03/17/MySql%E7%9A%84MHA%E9%AB%98%E5%8F%AF%E7%94%A8%E9%83%A8%E7%BD%B2/" class="article-next" title="MySql的MHA高可用部署"><i class="icon-arrow-right"></i></a>
+
+
+<a id="pageprev" href="/2021/04/06/About-Me/" class="article-prev" title="About Me"><i class="icon-arrow-left"></i></a>
+
+
+
+<div class="comments">
+    <div id="comments"></div>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+    new Gitalk({
+        clientID: "216f44fe4eed95b6ca0d",
+        clientSecret: "a3a880921fa4799d062dae8b25f6def7621078b5",
+        repo: "lilien1010.github.io",
+        owner: "lilien1010",
+        admin: ["lilien1010"],
+        id: "86a0f017ad5869f03d759918aa3792c8",
+        distractionFreeMode: true,
+        title: "使用 Github Action 自动发布Docker镜像到 Dockerhub",
+        body: "http://blog.hellotalk.org/2021/03/13/%E4%BD%BF%E7%94%A8-Github-Action-%E8%87%AA%E5%8A%A8%E5%8F%91%E5%B8%83%E9%95%9C%E5%83%8F%E5%88%B0Dockerhub/",
+        labels: ["Docker","Github"]
+    }).render('comments');
+    </script>
+</div>
+
+
+
+            </div>
+        </div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+
+    
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?54b70fad0249c2f4ed1e062b7961facb";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    
+</footer>
+
+    </main>
+
+    <script type="text/javascript" src="https://unpkg.com/jquery@1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var nodes = {
+            nav: $('#nav'),
+            aside: $('#aside'),
+            asideInner: $('#aside-inner'),
+            navInner: $('#nav-inner')
+        };
+
+        var doing = false;
+        nodes.asideInner.on('webkitAnimationEnd mozAnimationEnd oAnimationEnd oanimationend animationend', function() {
+            if (nodes.aside.hasClass('mobile-open')) {
+                nodes.aside.removeClass('mobile-open');
+            } else {
+                nodes.aside.removeClass('mobile-close panel-show');
+            }
+            doing = false;
+        });
+        $('#open-panel, #aside-mask').on('click', function() {
+            if (doing) {
+                return;
+            }
+
+            if (nodes.aside.hasClass('panel-show')) {
+                nodes.aside.addClass('mobile-close');
+            } else {
+                nodes.aside.addClass('mobile-open panel-show');
+            }
+        });
+        $('#open-menus').on('click', function() {
+            nodes.navInner.slideToggle('normal', slideDone);
+        });
+
+        if (window.innerWidth <= 960) {
+            setTimeout(function() {
+                nodes.navInner.slideUp('normal', slideDone);
+            }, 3000);
+        }
+
+        function slideDone() {
+            if (nodes.navInner.css('display') !== 'none') {
+                nodes.navInner.css('display', '');
+            }
+        }
+
+        $(window).on('resize', function() {
+            if ($(this).width() > 960) {
+                nodes.navInner.css('display', '');
+            }
+        });
+    });
+    </script>
+    
+        
+<script src="/js/scrollspy.min.js"></script>
+
+        <script type="text/javascript">
+        $(document.body).scrollspy({target: '#aside-inner'});
+
+        $(window).on('resize', function() {
+            var hw = $('#header').width();
+            var ww = $('#wrapper').width();
+            var space = ($(this).width() - hw - ww) / 2 / 2;
+
+            var pageprev = $('#pageprev');
+            var pagenext = $('#pagenext');
+            var avg = (pageprev.width() + pagenext.width()) / 2
+
+            if(space > avg) {
+                var len = space - avg / 2;
+                var styles = {position: 'fixed', top: '50%', marginTop: - (pageprev.width() + pagenext.width()) / 4}
+                pageprev.css($.extend({left: hw + len}, styles));
+                pagenext.css($.extend({right: len}, styles));
+            } else {
+                pageprev.removeAttr('style');
+                pagenext.removeAttr('style');
+            }
+        }).trigger('resize');
+        </script>
+    
+
+</body>
+</html>
